@@ -66,3 +66,7 @@ display:block;
 .dropdown {
     margin-top: 100px;
 }
+
+.Post {
+    border: 2px solid black;
+}
