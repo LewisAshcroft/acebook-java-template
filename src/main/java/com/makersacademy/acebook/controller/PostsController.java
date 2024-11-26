@@ -35,8 +35,10 @@ public class PostsController {
     }
 
     @PostMapping("/new-post")
-    public RedirectView create(@ModelAttribute Post post, @RequestParam("file") MultipartFile file) {
-        String uploadAddress = storageService.save(file); //TODO Probably wants some kind of error catch here
+    public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
+        Post post = new Post();
+        String uploadAddress = storageService.save(file);
+        post.setContent(uploadAddress);
         postRepository.save(post);
         return new RedirectView("/posts");
     }
