@@ -30,13 +30,10 @@
         </div>
 
         <div class="Feed">
-            <div>
-                <div th:each="i : ${#numbers.sequence(1, 5)}">
-                    <div class="Post">
-                    <div class="Centre">
-                        <div class="TextBox">
-                            Test Text Box
-                        </div>
+            <div th:each="i : ${#numbers.sequence(1, 5)}">
+                <div class="Post">
+                    <div class="TextBox">
+                        Test Text Box
                     </div>
                     <div class="BottomBar">
                         <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
@@ -46,7 +43,6 @@
                             <div class="Delete>">Delete &nbsp</div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>

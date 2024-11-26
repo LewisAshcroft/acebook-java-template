@@ -71,7 +71,8 @@ display:block;
     border: 2px solid black;
     width: 80%;
     justify-self: center;
-    margin: 20px;
+    margin: auto;
+    margin-top: 20px;
 }
 
 .TimeStamp {
@@ -101,5 +102,4 @@ display:block;
 
 .Centre{
     justify-content: center;
-    display: flex;
 }
