@@ -35,7 +35,7 @@
     padding: 20px;
     width: 1000px;
     height: auto;
-    display: flex;
+    display: block;
     justify-content: center;
 }
 
@@ -69,4 +69,37 @@ display:block;
 
 .Post {
     border: 2px solid black;
+    width: 80%;
+    justify-self: center;
+    margin: 20px;
+}
+
+.TimeStamp {
+    width: 120px;
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 5px;
+}
+
+.Like {
+    float: right;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+
+
+.BottomBar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.TextBox {
+    padding: 5px;
+    width: 95%;
+    min-height: 100px;
+}
+
+.Centre{
+    justify-content: center;
+    display: flex;
 }

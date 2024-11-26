@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-        <link rel="stylesheet" href=mainPage.css">
+        <link rel="stylesheet" href="mainPage.css">
         <script rel="mainPage.js" src="mainPage.js"></script>
         <div class="Banner"> <h1>Acebook</h1> <div class="ButtonHolder"> <h1>Post</h1> <h1>Profile</h1> </div> </div>
     </head>
@@ -30,7 +30,25 @@
         </div>
 
         <div class="Feed">
-            <div class="Post">X</div>
+            <div>
+                <div th:each="i : ${#numbers.sequence(1, 5)}">
+                    <div class="Post">
+                    <div class="Centre">
+                        <div class="TextBox">
+                            Test Text Box
+                        </div>
+                    </div>
+                    <div class="BottomBar">
+                        <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
+                        <div class="BottomBar">
+                            <div class="Comment">Comment &nbsp</div>
+                            <div class="Like">Like</div>
+                            <div class="Delete>">Delete &nbsp</div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
 
     </div>
