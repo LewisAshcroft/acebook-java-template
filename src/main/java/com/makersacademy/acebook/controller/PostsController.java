@@ -36,9 +36,10 @@ public class PostsController {
 
     @PostMapping("/new-post")
     public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
-        Post post = new Post();
+        Post post = new Post("", "", 1L, false, null, null);
         String uploadAddress = storageService.save(file);
-        post.setContent(uploadAddress);
+        post.setPicture(uploadAddress);
+        post.setContent(content);
         postRepository.save(post);
         return new RedirectView("/posts");
     }

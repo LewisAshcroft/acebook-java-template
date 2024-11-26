@@ -16,22 +16,24 @@ public class Post {
     private Long id;
     private String content;
     private String picture;
-    private Integer user_id;
+    private Long user_id;
     private Boolean is_public;
     private Timestamp created_at;
     private Timestamp updated_at;
 
     public Post() {}
 
-    public Post(String content) {
+    public Post(String content, String picture, Long user_id, Boolean is_public, Timestamp created_at, Timestamp updated_at) {
         this.content = content;
-        this.picture = "temp";
-        this.user_id = 1;
-        this.is_public = false;
-        this.created_at = new Timestamp(1);
-        this.updated_at = new Timestamp(1);
+        this.picture = picture;
+        this.user_id = user_id;
+        this.is_public = is_public;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
     }
+
     public String getContent() { return this.content; }
     public void setContent(String content) { this.content = content; }
-
+    public String getPicture() { return this.picture; }
+    public void setPicture(String picture) { this.picture = picture; }
 }

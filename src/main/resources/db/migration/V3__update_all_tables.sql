@@ -27,8 +27,6 @@ CREATE TABLE posts (
                     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS posts;
-
 DROP TABLE IF EXISTS comments;
 
 CREATE TABLE comments (
