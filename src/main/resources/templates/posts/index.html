@@ -1,27 +1,53 @@
 <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org"
-          xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
-    <head lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-        <link rel="stylesheet" href="/main.css" />
+        <link rel="stylesheet" href="mainPage.css">
+        <script rel="mainPage.js" src="mainPage.js"></script>
+        <div class="Banner"> <h1>Acebook</h1> <div class="ButtonHolder"> <h1>Post</h1> <h1>Profile</h1> </div> </div>
     </head>
     <body>
 
-    <h1>Posts</h1>
+    <div class="Content">
 
-    <div sec:authorize="isAuthenticated()" id="greeting">
-        Signed in as <span sec:authentication="principal.attributes['email']"></span>
+        <div class="SearchHolder">
+
+            <input class="searchbar" id ="searchbar" type="text" placeholder="Search" oninput="searchFunction()">
+
+            <div class="dropdown">
+
+                <button onclick="myFunction()" class="dropbtn">Sort</button>
+
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="Feed">
+            <div th:each="i : ${#numbers.sequence(1, 5)}">
+                <div class="Post" th:id="${i}">
+                    <div class="TextBox">
+                        Test Text Box
+                    </div>
+                    <div class="BottomBar">
+                        <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
+                        <div class="BottomBar">
+                            <div class="Comment">Comment &nbsp</div>
+                            <div class="Like">Like</div>
+                            <div class="Delete>">Delete &nbsp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-    <form action="#" th:action="@{/posts}" th:object="${post}" method="post">
-        <p>Content: <input type="text" th:field="*{content}" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-    </form>
-
-    <ul th:each="post: ${posts}">
-        <li th:text="${post.content}" />
-    </ul>
 
     </body>
 </html>

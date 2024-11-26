@@ -1,3 +1,4 @@
+.gitignore
 /target
 .idea/
 /node_modules
@@ -9,6 +10,6 @@ dependency-reduced-pom.xml
 .factorypath
 .project
 .settings/
-
+/src/main/resources/application.yml
 ### Auth0 ###
 application.yml
