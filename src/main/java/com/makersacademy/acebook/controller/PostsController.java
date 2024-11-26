@@ -16,13 +16,13 @@ import java.util.List;
 public class PostsController {
 
     @Autowired
-    PostRepository repository;
+    PostRepository postRepository;
     @Autowired
     FilesStorageService storageService;
 
     @GetMapping("/posts")
     public String index(Model model) {
-        Iterable<Post> posts = repository.findAll();
+        Iterable<Post> posts = postRepository.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
         return "posts/index";
@@ -37,7 +37,7 @@ public class PostsController {
     @PostMapping("/new-post")
     public RedirectView create(@ModelAttribute Post post, @RequestParam("file") MultipartFile file) {
         String uploadAddress = storageService.save(file); //TODO Probably wants some kind of error catch here
-        repository.save(post);
+        postRepository.save(post);
         return new RedirectView("/posts");
     }
 }
