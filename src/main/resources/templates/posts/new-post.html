@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="#" th:action="@{/new-post}" th:object="${post}" enctype="multipart/form-data" method="post">
+        <p>Content: <input type="text" name="content" th:field="*{content}" /></p>
+        <p>File: <input id="input-file" type="file" name="file" /></p>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+</body>
+</html>

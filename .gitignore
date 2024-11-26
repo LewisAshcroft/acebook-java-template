@@ -11,5 +11,6 @@ dependency-reduced-pom.xml
 .project
 .settings/
 /src/main/resources/application.yml
+/uploads/*
 ### Auth0 ###
 application.yml
