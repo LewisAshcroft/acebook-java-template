@@ -9,7 +9,7 @@
     <form action="#" th:action="@{/new-post}" th:object="${post}" enctype="multipart/form-data" method="post">
         <p>Content: <input type="text" th:field="*{content}" /></p>
         <p>File: <input id="input-file" type="file" name="file" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Clear" /></p>
+        <p><input type="submit" value="Submit" /></p>
     </form>
 
 <!--    <div class="container" style="max-width: 500px">-->
