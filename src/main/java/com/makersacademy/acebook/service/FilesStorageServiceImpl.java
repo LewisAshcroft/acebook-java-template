@@ -3,6 +3,7 @@ package com.makersacademy.acebook.service;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import org.springframework.core.io.Resource;
@@ -30,8 +31,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             String fileName = file.getOriginalFilename();
             int lastDotIndex = fileName.lastIndexOf(".");
             String extension = (lastDotIndex > 0) ? fileName.substring(lastDotIndex) : "";
-            String filename = "UID" + extension;
-            Files.copy(file.getInputStream(), this.root.resolve("TEST" + extension), StandardCopyOption.REPLACE_EXISTING);
+            String fileId = UUID.randomUUID().toString();
+            String filename = fileId + extension;
+            Files.copy(file.getInputStream(), this.root.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
             return filename;
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
