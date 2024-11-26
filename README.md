@@ -11,6 +11,10 @@ The application uses:
   
 Below, you'll find specific learning objectives for each tool.
 
+Project Trello Board:
+
+https://trello.com/b/Q4hANuIc/acebook-meta-the-pixels
+
 ## QuickStart Instructions
 
 - Fork and clone this repository to your machine
