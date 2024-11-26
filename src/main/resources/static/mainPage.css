@@ -63,6 +63,10 @@
 display:block;
 }
 
+.hide {
+display:none;
+}
+
 .dropdown {
     margin-top: 100px;
 }
