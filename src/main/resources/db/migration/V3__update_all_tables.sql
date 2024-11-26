@@ -10,7 +10,7 @@ CREATE TABLE users (
                     bio varchar(200),
                     is_public boolean NOT NULL DEFAULT TRUE,
                     created_at TIMESTAMP DEFAULT NOW(),
-                    updated_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
+                    updated_at TIMESTAMP DEFAULT NOW(),
                     enabled boolean NOT NULL
 );
 
@@ -23,8 +23,8 @@ CREATE TABLE posts (
                     picture text,
                     is_public boolean NOT NULL DEFAULT TRUE,
                     created_at TIMESTAMP DEFAULT NOW(),
-                    updated_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
-                    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+                    updated_at TIMESTAMP DEFAULT NOW(),
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS comments;
@@ -57,6 +57,6 @@ CREATE TABLE friends (
                     user_2_id bigint NOT NULL,
                     status varchar(20) DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'blocked')),
                     PRIMARY KEY (user_1_id, user_2_id),
-                    FOREIGN KEY (user_1_id) REFERENCES user(id) ON DELETE CASCADE,
+                    FOREIGN KEY (user_1_id) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY (user_2_id) REFERENCES users(id) ON DELETE CASCADE
 );
