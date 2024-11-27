@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS users;
-DROP SEQUENCE IF EXISTS users_id_seq;
+DROP TABLE IF EXISTS users CASCADE;
+DROP SEQUENCE IF EXISTS users_id_seq CASCADE;
 
 CREATE SEQUENCE IF NOT EXISTS users_id_seq;
 CREATE TABLE users (
@@ -22,8 +22,8 @@ CREATE TABLE users (
                     enabled boolean NOT NULL
 );
 
-DROP TABLE IF EXISTS posts;
-DROP SEQUENCE IF EXISTS posts_id_seq;
+DROP TABLE IF EXISTS posts CASCADE;
+DROP SEQUENCE IF EXISTS posts_id_seq CASCADE;
 
 CREATE SEQUENCE IF NOT EXISTS posts_id_seq;
 CREATE TABLE posts (
@@ -37,8 +37,8 @@ CREATE TABLE posts (
                        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS comments;
-DROP SEQUENCE IF EXISTS comments_id_seq;
+DROP TABLE IF EXISTS comments CASCADE;
+DROP SEQUENCE IF EXISTS comments_id_seq CASCADE;
 
 CREATE SEQUENCE IF NOT EXISTS comments_id_seq;
 CREATE TABLE comments (
@@ -157,8 +157,8 @@ VALUES
     (12, 6, 'This looks like the adventure of a lifetime. What was your favorite part?', '2024-09-02 14:45:00'),
     (13, 13, 'I love that you appreciate your followers so much. So inspiring!', '2024-05-01 19:15:00'),
     (14, 9, 'Tokyo is such an exciting place! The tech culture is unlike anywhere else.', '2024-04-19 12:30:00'),
-    (15, 16, 'Sustainability is so important. Let’s make it a priority for future generations!', '2024-03-30 09:00:00'),
-    (16, 17, 'That first day feeling is always surreal. Congrats!', '2024-05-14 18:00:00'),
+    (15, 15, 'Sustainability is so important. Let’s make it a priority for future generations!', '2024-03-30 09:00:00'),
+    (16, 4, 'That first day feeling is always surreal. Congrats!', '2024-05-14 18:00:00'),
     (17, 11, 'Those hiking trails are amazing. Keep the adventure going!', '2024-06-01 14:15:00'),
     (18, 2, 'The Amazon rainforest is one of the most beautiful places on Earth.', '2024-07-02 13:00:00'),
     (4, 15, 'Love the campaign! It’s so important to raise awareness for sustainability.', '2024-08-19 11:00:00'),
