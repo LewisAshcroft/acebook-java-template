@@ -17,8 +17,6 @@ public class PostsController {
     @Autowired
     PostRepository postRepository;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
     FilesStorageService storageService;
 
     @GetMapping("/posts")
@@ -44,5 +42,11 @@ public class PostsController {
         post.setContent(content);
         postRepository.save(post);
         return new RedirectView("/posts");
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deletePost(@PathVariable("id") long postId) {
+        postRepository.deleteById(postId);
+        return "redirect:/post";
     }
 }

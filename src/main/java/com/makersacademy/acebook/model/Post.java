@@ -49,6 +49,8 @@ public class Post {
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
     public Timestamp getUpdatedAt() { return this.updatedAt; }
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    public long getId() {return this.id;}
+    public void setId() {this.id = id;}
 
 
 }
