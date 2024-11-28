@@ -41,6 +41,8 @@ public class Post {
     public void setContent(String content) { this.content = content; }
     public String getPicture() { return this.picture; }
     public void setPicture(String picture) { this.picture = picture; }
+    public Long getId() {return this.id;}
+    public void setId() { this.id = id;}
     public Long getUserId() { return this.userId; }
     public void setUserId(Long userId) { this.userId = userId; }
     public Boolean getIsPublic() { return this.isPublic; }
@@ -49,6 +51,7 @@ public class Post {
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
     public Timestamp getUpdatedAt() { return this.updatedAt; }
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+
 
 
 }
