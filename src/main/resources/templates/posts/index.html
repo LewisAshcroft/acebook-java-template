@@ -9,20 +9,7 @@
     </head>
     <body>
 
-    <ul th:each="post : ${posts}">
-        <li>
-            <p>Content: <span th:text="${post.content}"></span></p>
-            <p>Picture: <span th:text="${post.picture}"></span></p>
-            <p>Created At: <span th:text="${post.createdAt}"></span></p>
-            <p>Updated At: <span th:text="${post.updatedAt}"></span></p>
-        </li>
-    </ul>
 
-    <ul th:each="user : ${users}">
-        <li>
-            <p>Username: <span th:text="${user.username}"></span></p>
-        </li>
-    </ul>
 
 
     <div class="Content">
@@ -49,7 +36,20 @@
             <div th:each="i : ${#numbers.sequence(1, 5)}">
                 <div class="Post" th:id="${i}">
                     <div class="TextBox">
-                        Test Text Box
+                        <ul th:each="post : ${posts}">
+                            <li>
+                                <p>Content: <span th:text="${post.content}"></span></p>
+                                <p>Picture: <span th:text="${post.picture}"></span></p>
+                                <p>Created At: <span th:text="${post.createdAt}"></span></p>
+                                <p>Updated At: <span th:text="${post.updatedAt}"></span></p>
+                            </li>
+                        </ul>
+
+                        <ul th:each="user : ${users}">
+                            <li>
+                                <p>Username: <span th:text="${user.username}"></span></p>
+                            </li>
+                        </ul>
                     </div>
                     <div class="BottomBar">
                         <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
