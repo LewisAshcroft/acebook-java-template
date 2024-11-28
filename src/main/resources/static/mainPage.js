@@ -35,3 +35,16 @@ function searchFunction() {
         }
     }
 }
+
+function likePost(likeButton) {
+    // Check if the button already has a "liked" class
+    if (likeButton.classList.contains('liked')) {
+        // Unlike the post
+        likeButton.classList.remove('liked');
+        likeButton.innerHTML = '♡';
+    } else {
+        // Like the post
+        likeButton.classList.add('liked');
+        likeButton.innerHTML = '❤️';
+    }
+}
