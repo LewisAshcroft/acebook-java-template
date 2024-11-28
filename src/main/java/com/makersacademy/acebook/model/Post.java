@@ -3,6 +3,7 @@ package com.makersacademy.acebook.model;
 import jakarta.persistence.*;
 
 import lombok.Data;
+import org.hibernate.type.descriptor.jdbc.TimestampWithTimeZoneJdbcType;
 
 import java.sql.Timestamp;
 
@@ -37,4 +38,12 @@ public class Post {
     public void setContent(String content) { this.content = content; }
     public String getPicture() { return this.picture; }
     public void setPicture(String picture) { this.picture = picture; }
+    public Long getUser_Id() { return this.user_id; }
+    public void setUser_id(Long userId) { this.user_id = userId; }
+    public Boolean getIs_public() { return this.is_public; }
+    public void setIs_public(Boolean isPublic) { this.is_public = isPublic; }
+    public Timestamp getCreated_at() { return this.created_at; }
+    public void setCreated_at(Timestamp created_at) { this.created_at = created_at; }
+    public Timestamp getUpdated_at() { return this.created_at; }
+    public void setUpdated_at(Timestamp updated_at) { this.updated_at = updated_at; }
 }

@@ -24,11 +24,4 @@ public class HomeController {
 		return new RedirectView("/posts");
 	}
 
-	@GetMapping("/showallposts")
-	public ModelAndView showallposts() {
-		ModelAndView modelAndView = new ModelAndView("/showallposts");
-		List<Post> posts = postrepository.findAll();
-		modelAndView.addObject("posts", posts);
-		return modelAndView;
-    }
 }
