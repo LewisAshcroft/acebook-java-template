@@ -22,6 +22,8 @@ public class PostsController {
     @Autowired
     PostRepository postRepository;
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     FilesStorageService storageService;
     @Autowired
     LikeRepository likeRepository;
@@ -30,9 +32,13 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String index(Model model) {
-        Iterable<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll();
+        List<User> users = userRepository.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
+        model.addAttribute("users", users);
+        model.addAttribute("user", new User());
+
         return "posts/index";
     }
 
@@ -52,9 +58,7 @@ public class PostsController {
         return new RedirectView("/posts");
     }
 
-
-
-
+  
     @PostMapping("/like/{postId}")
     public String likePost(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId) {
 
@@ -92,5 +96,12 @@ public class PostsController {
 
         // Redirect to the posts page (or wherever you want)
         return "redirect:/posts";
+
+      
+      
+    @PostMapping("/delete/{id}")
+    public String deletePost(@PathVariable("id") long postId) {
+        postRepository.deleteById(postId);
+        return "redirect:/post";
     }
 }
