@@ -9,6 +9,17 @@
     </head>
     <body>
 
+    <ul th:each="post: ${posts}">
+        <li>
+            <span th:text="${post.picture}"></span>
+        </li>
+    </ul>
+    <ul th:each="user: ${users}">
+        <li>
+            <span th:text="${user.username}"></span>
+        </li>
+    </ul>
+
     <div class="Content">
 
         <div class="SearchHolder">
