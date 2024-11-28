@@ -30,10 +30,15 @@ public class Post {
         this.is_public = is_public;
         this.created_at = created_at;
         this.updated_at = updated_at;
+
     }
 
     public String getContent() { return this.content; }
     public void setContent(String content) { this.content = content; }
     public String getPicture() { return this.picture; }
     public void setPicture(String picture) { this.picture = picture; }
+    public Long getId() {return this.id;}
+    public void setId() { this.id = id;}
+
+
 }
