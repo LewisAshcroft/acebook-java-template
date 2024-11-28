@@ -33,26 +33,16 @@
         </div>
 
         <div class="Feed">
-            <div th:each="i : ${#numbers.sequence(1, 5)}">
+            <div th:each="post : ${posts}">
                 <div class="Post" th:id="${i}">
+                    <div class="Username">
+                        <span th:text="${post.userId}"></span>
+                    </div>
                     <div class="TextBox">
-                        <ul th:each="post : ${posts}">
-                            <li>
-                                <p>Content: <span th:text="${post.content}"></span></p>
-                                <p>Picture: <span th:text="${post.picture}"></span></p>
-                                <p>Created At: <span th:text="${post.createdAt}"></span></p>
-                                <p>Updated At: <span th:text="${post.updatedAt}"></span></p>
-                            </li>
-                        </ul>
-
-                        <ul th:each="user : ${users}">
-                            <li>
-                                <p>Username: <span th:text="${user.username}"></span></p>
-                            </li>
-                        </ul>
+                               <span th:text="${post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
+                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
                             <button  class="Comment">Comment &nbsp</button>
                             <button class="Like">Like</button>
