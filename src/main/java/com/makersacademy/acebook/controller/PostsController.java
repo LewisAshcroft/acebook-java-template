@@ -26,12 +26,10 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String index(Model model) {
+        long count = postRepository.count();
         Iterable<Post> posts = postRepository.findAll();
-        Iterable<User> users = userRepository.findAll();
+        model.addAttribute("numberOfPosts", count);
         model.addAttribute("posts", posts);
-        model.addAttribute("post", new Post());
-        model.addAttribute("users", users);
-        model.addAttribute("user", new User());
         return "posts/index";
     }
 

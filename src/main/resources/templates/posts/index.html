@@ -9,21 +9,17 @@
     </head>
     <body>
 
-    <ul th:each="post : ${posts}">
+    <ul th:each="post: ${posts}">
         <li>
-            <p>Content: <span th:text="${post.content}"></span></p>
-            <p>Picture: <span th:text="${post.picture}"></span></p>
-            <p>Created At: <span th:text="${post.createdAt}"></span></p>
-            <p>Updated At: <span th:text="${post.updatedAt}"></span></p>
+            <span th:text="${post.picture}"></span>
         </li>
     </ul>
 
-    <ul th:each="user : ${users}">
+    <ul th:each="user: ${users}">
         <li>
-            <p>Username: <span th:text="${user.username}"></span></p>
+            <span th:text="${user.username}"></span>
         </li>
     </ul>
-
 
     <div class="Content">
 
@@ -46,7 +42,7 @@
         </div>
 
         <div class="Feed">
-            <div th:each="i : ${#numbers.sequence(1, 5)}">
+            <div th:each="i : ${#numbers.sequence(1, {numberOfPosts})}">
                 <div class="Post" th:id="${i}">
                     <div class="TextBox">
                         Test Text Box

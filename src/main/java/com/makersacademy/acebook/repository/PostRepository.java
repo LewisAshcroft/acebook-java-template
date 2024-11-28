@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
 
+    @Override
+    long count();
 
-    List<Post> findAll();
+    List findAll();
 }
