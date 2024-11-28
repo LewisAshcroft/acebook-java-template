@@ -6,5 +6,8 @@
 <body>
     <p id="username" th:text="${user.username}"></p>
     <p id="bio" th:text="${user.bio}"></p>
+    <ul th:each="post: ${posts}">
+        <li th:text="${post.content}" />
+    </ul>
 </body>
 </html>

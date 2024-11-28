@@ -1,6 +1,8 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public class UsersController {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PostRepository postRepository;
 
     @GetMapping("/users/after-login")
     public RedirectView afterLogin() {
@@ -35,8 +39,10 @@ public class UsersController {
     @GetMapping("/profile/{id}")
     public ModelAndView userProfile(@PathVariable Long id, Model model) {
         ModelAndView modelAndView = new ModelAndView("/user/profile");
-        User user = userRepository.findById(1L).get();
+        User user = userRepository.findById(id).get();
         modelAndView.addObject("user", user);
+        Iterable<Post> posts = postRepository.findAllByUserId(id);
+        modelAndView.addObject("posts", posts);
         return modelAndView;
     }
 }
