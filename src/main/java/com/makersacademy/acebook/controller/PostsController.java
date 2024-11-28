@@ -26,8 +26,8 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String index(Model model) {
-        List<Post> posts = postRepository.findAllPublicPostsOrderedByCreatedAt();
-        Iterable<User> users = userRepository.findById();
+        Iterable<Post> posts = postRepository.findAll();
+        Iterable<User> users = userRepository.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
         model.addAttribute("users", users);

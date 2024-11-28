@@ -9,16 +9,21 @@
     </head>
     <body>
 
-    <ul th:each="post: ${posts}">
+    <ul th:each="post : ${posts}">
         <li>
-            <span th:text="${post.picture}"></span>
+            <p>Content: <span th:text="${post.content}"></span></p>
+            <p>Picture: <span th:text="${post.picture}"></span></p>
+            <p>Created At: <span th:text="${post.createdAt}"></span></p>
+            <p>Updated At: <span th:text="${post.updatedAt}"></span></p>
         </li>
     </ul>
-    <ul th:each="user: ${users}">
+
+    <ul th:each="user : ${users}">
         <li>
-            <span th:text="${user.username}"></span>
+            <p>Username: <span th:text="${user.username}"></span></p>
         </li>
     </ul>
+
 
     <div class="Content">
 
