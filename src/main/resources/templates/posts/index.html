@@ -9,6 +9,9 @@
     </head>
     <body>
 
+
+
+
     <div class="Content">
 
         <div class="SearchHolder">
@@ -30,17 +33,20 @@
         </div>
 
         <div class="Feed">
-            <div th:each="i : ${#numbers.sequence(1, 5)}">
+            <div th:each="post : ${posts}">
                 <div class="Post" th:id="${i}">
+                    <div class="Username">
+                        <span th:text="${post.userId}"></span>
+                    </div>
                     <div class="TextBox">
-                        Test Text Box
+                               <span th:text="${post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
+                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
-                            <div class="Comment">Comment &nbsp</div>
-                            <div class="Like">Like</div>
-                            <div class="Delete>">Delete &nbsp</div>
+                            <button  class="Comment">Comment &nbsp</button>
+                            <button class="Like">Like</button>
+                            <button class="Delete>">Delete &nbsp</button>
                         </div>
                     </div>
                 </div>
