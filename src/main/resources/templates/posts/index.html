@@ -9,18 +9,6 @@
     </head>
     <body>
 
-    <ul th:each="post: ${posts}">
-        <li>
-            <span th:text="${post.picture}"></span>
-        </li>
-    </ul>
-
-    <ul th:each="user: ${users}">
-        <li>
-            <span th:text="${user.username}"></span>
-        </li>
-    </ul>
-
     <div class="Content">
 
         <div class="SearchHolder">
@@ -44,9 +32,7 @@
         <div class="Feed">
             <div th:each="i : ${#numbers.sequence(1, {numberOfPosts})}">
                 <div class="Post" th:id="${i}">
-                    <div class="TextBox">
-                        Test Text Box
-                    </div>
+                    <div class="TextBox" th:text="${post id i.content}"></div>
                     <div class="BottomBar">
                         <div class="TimeStamp">26/11/24 &nbsp 11:34</div>
                         <div class="BottomBar">

@@ -1,7 +1,6 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.Post;
-import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.FilesStorageService;
@@ -11,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.List;
 
 @Controller
 public class PostsController {
@@ -28,8 +25,8 @@ public class PostsController {
     public String index(Model model) {
         long count = postRepository.count();
         Iterable<Post> posts = postRepository.findAll();
-        model.addAttribute("numberOfPosts", count);
         model.addAttribute("posts", posts);
+        model.addAttribute("numberOfPosts", count);
         return "posts/index";
     }
 
