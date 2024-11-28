@@ -1,7 +1,9 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.Post;
+import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
+import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +20,19 @@ public class PostsController {
     @Autowired
     PostRepository postRepository;
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     FilesStorageService storageService;
 
     @GetMapping("/posts")
     public String index(Model model) {
-        Iterable<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll();
+        List<User> users = userRepository.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("post", new Post());
+        model.addAttribute("users", users);
+        model.addAttribute("user", new User());
+
         return "posts/index";
     }
 

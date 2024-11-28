@@ -3,6 +3,7 @@ package com.makersacademy.acebook.model;
 import jakarta.persistence.*;
 
 import lombok.Data;
+import org.hibernate.type.descriptor.jdbc.TimestampWithTimeZoneJdbcType;
 
 import java.sql.Timestamp;
 
@@ -16,21 +17,24 @@ public class Post {
     private Long id;
     private String content;
     private String picture;
-    private Long user_id;
-    private Boolean is_public;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "is_public")
+    private Boolean isPublic;
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 
     public Post() {}
 
-    public Post(String content, String picture, Long user_id, Boolean is_public, Timestamp created_at, Timestamp updated_at) {
+    public Post(String content, String picture, Long userId, Boolean isPublic, Timestamp createdAt, Timestamp updatedAt) {
         this.content = content;
         this.picture = picture;
-        this.user_id = user_id;
-        this.is_public = is_public;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-
+        this.userId = userId;
+        this.isPublic = isPublic;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public String getContent() { return this.content; }
@@ -39,6 +43,15 @@ public class Post {
     public void setPicture(String picture) { this.picture = picture; }
     public Long getId() {return this.id;}
     public void setId() { this.id = id;}
+    public Long getUserId() { return this.userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+    public Boolean getIsPublic() { return this.isPublic; }
+    public void setIsPublic(Boolean isPublic) { this.isPublic = isPublic; }
+    public Timestamp getCreatedAt() { return this.createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public Timestamp getUpdatedAt() { return this.updatedAt; }
+    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+
 
 
 }

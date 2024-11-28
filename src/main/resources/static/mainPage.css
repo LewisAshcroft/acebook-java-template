@@ -80,7 +80,7 @@ display:none;
 }
 
 .TimeStamp {
-    width: 120px;
+    width: 180px;
     display: flex;
     justify-content: space-evenly;
     padding-bottom: 5px;
@@ -106,4 +106,12 @@ display:none;
 
 .Centre{
     justify-content: center;
+}
+
+.Username{
+    border: 2px solid black;
+    margin-left: 15px;
+    margin-top: 10px;
+    width: 100px;
+
 }

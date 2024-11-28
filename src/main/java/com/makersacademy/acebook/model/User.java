@@ -19,6 +19,8 @@ public class User {
 
     private String email;
 
+    private String bio;
+
     private boolean enabled;
 
     public User() {
@@ -37,6 +39,11 @@ public class User {
         this.enabled = enabled;
     }
 
+    public User(String username, String bio) {
+        this.username = username;
+        this.bio = bio;
+    }
+
     // Getters and Setters
     public String getAuth0Id() {
         return auth0Id;
@@ -52,6 +59,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public String getUsername() {
