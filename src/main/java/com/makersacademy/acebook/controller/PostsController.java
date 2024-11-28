@@ -1,7 +1,9 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.model.Like;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.LikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.FilesStorageService;
@@ -23,6 +25,10 @@ public class PostsController {
     UserRepository userRepository;
     @Autowired
     FilesStorageService storageService;
+    @Autowired
+    LikeRepository likeRepository;
+    @Autowired
+    UserRepository userRepository;  // Assuming you have a User repository
 
     @GetMapping("/posts")
     public String index(Model model) {
@@ -52,6 +58,47 @@ public class PostsController {
         return new RedirectView("/posts");
     }
 
+  
+    @PostMapping("/like/{postId}")
+    public String likePost(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId) {
+
+        // Fetch the post and user by their IDs
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+
+        // Check if the user has already liked the post
+        Like existingLike = likeRepository.findByUserIdAndPostId(userId, postId);
+        if (existingLike == null) {
+            // Create a new like if it doesn't exist
+            Like like = new Like();
+            like.setPost(post);
+            like.setUser(user);
+            likeRepository.save(like);
+        }
+
+        // Redirect to the posts page (or wherever you want)
+        return "redirect:/posts";  // Ensure this path is correct
+    }
+
+
+
+    // Unlike a post
+    @DeleteMapping("/unlike/{postId}")
+    public String unlikePost(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+
+        // Find and delete the like
+        Like existingLike = likeRepository.findByUserIdAndPostId(userId, postId);
+        if (existingLike != null) {
+            likeRepository.delete(existingLike);
+        }
+
+        // Redirect to the posts page (or wherever you want)
+        return "redirect:/posts";
+
+      
+      
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
         postRepository.deleteById(postId);

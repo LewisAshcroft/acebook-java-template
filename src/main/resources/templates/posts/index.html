@@ -32,21 +32,28 @@
 
         </div>
 
+        <script>
+            var userId = 1;
+        </script>
+
         <div class="Feed">
             <div th:each="post : ${posts}">
                 <div class="Post" th:id="${i}">
                     <div class="Username">
                         <span th:text="${post.userId}"></span>
                     </div>
+
                     <div class="TextBox">
                                <span th:text="${post.content}"></span>
                     </div>
                     <div class="BottomBar">
                         <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
+
                             <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like">Like</button>
+                            <button class="Like" onclick="likePost(this)" >♡</button>
                             <button class="Delete>">Delete &nbsp</button>
+
                         </div>
                     </div>
                 </div>
