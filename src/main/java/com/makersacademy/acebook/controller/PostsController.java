@@ -27,8 +27,6 @@ public class PostsController {
     FilesStorageService storageService;
     @Autowired
     LikeRepository likeRepository;
-    @Autowired
-    UserRepository userRepository;  // Assuming you have a User repository
 
     @GetMapping("/posts")
     public String index(Model model) {
@@ -96,9 +94,9 @@ public class PostsController {
 
         // Redirect to the posts page (or wherever you want)
         return "redirect:/posts";
+    }
 
-      
-      
+
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
         postRepository.deleteById(postId);
