@@ -16,6 +16,7 @@ public class Post {
     private Long id;
     private String content;
     private String picture;
+    @Column(name = "user_id")
     private Long user_id;
     private Boolean is_public;
     private Timestamp created_at;
