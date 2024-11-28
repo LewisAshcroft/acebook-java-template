@@ -45,4 +45,11 @@ public class UsersController {
         modelAndView.addObject("posts", posts);
         return modelAndView;
     }
+
+    @PostMapping("/profile/{id}")
+    public RedirectView editUser(@ModelAttribute User user) {
+        System.out.println(user.getId());
+        userRepository.save(user);
+        return new RedirectView("/posts");
+    }
 }
