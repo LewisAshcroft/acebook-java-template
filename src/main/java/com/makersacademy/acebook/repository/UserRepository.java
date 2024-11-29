@@ -3,6 +3,7 @@ package com.makersacademy.acebook.repository;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
