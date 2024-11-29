@@ -57,7 +57,7 @@ public class PostsController {
             User activeUser = currentUser.get();
             Post post = new Post("", "", activeUser.getId(), false, null, null);
             String uploadAddress = storageService.save(file);
-            post.setPicture(uploadAddress);
+            post.setPicture("/files/" + uploadAddress);
             post.setContent(content);
             postRepository.save(post);
         }

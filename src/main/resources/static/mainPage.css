@@ -77,12 +77,12 @@ display:none;
     justify-self: center;
     margin: auto;
     margin-top: 20px;
+    padding: 15px 10px;
 }
 
 .TimeStamp {
     width: 180px;
     display: flex;
-    justify-content: space-evenly;
     padding-bottom: 5px;
 }
 
@@ -99,7 +99,6 @@ display:none;
 }
 
 .TextBox {
-    padding: 5px;
     width: 95%;
     min-height: 100px;
 }
@@ -110,8 +109,12 @@ display:none;
 
 .Username{
     border: 2px solid black;
-    margin-left: 15px;
-    margin-top: 10px;
     width: 100px;
+    margin-bottom: 10px;
+}
 
+#post-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
