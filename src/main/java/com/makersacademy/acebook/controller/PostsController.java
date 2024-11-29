@@ -41,11 +41,12 @@ public class PostsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
 
-        // Map posts and attach "isLiked" status
+        // Map posts and attach "isLiked" status and like count
         List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
         for (Post post : posts) {
             Map<String, Object> postWithStatus = new HashMap<>();
             postWithStatus.put("post", post);
+
             if (currentUser.isPresent()) {
                 User user = currentUser.get();
                 boolean isLiked = likeRepository.findByUserIdAndPostId(user.getId(), post.getId()) != null;
@@ -53,6 +54,11 @@ public class PostsController {
             } else {
                 postWithStatus.put("isLiked", false);
             }
+
+            // Add the like count
+            long likeCount = likeRepository.countByPostId(post.getId());
+            postWithStatus.put("likeCount", likeCount);
+
             postsWithLikeStatus.add(postWithStatus);
         }
 
@@ -84,49 +90,43 @@ public class PostsController {
 
 
     @PostMapping("/like/{postId}")
-    public String likePost(@PathVariable("postId") Long postId) {
-        // Retrieve the authenticated user
+    @ResponseBody
+    public Map<String, Object> likePost(@PathVariable("postId") Long postId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
 
-        if (currentUser.isEmpty()) {
-            return "redirect:/posts"; // Redirect if user is not authenticated
+        if (currentUser.isPresent()) {
+            User user = currentUser.get();
+            Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+            if (existingLike == null) {
+                Like like = new Like();
+                like.setPost(postRepository.findById(postId).orElseThrow());
+                like.setUser(user);
+                likeRepository.save(like);
+            }
         }
 
-        User user = currentUser.get();
-        Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
-
-        // Add a like if not already liked
-        if (existingLike == null) {
-            Like like = new Like();
-            like.setPost(postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id")));
-            like.setUser(user);
-            likeRepository.save(like);
-        }
-
-        return "redirect:/posts";
+        long likeCount = likeRepository.countByPostId(postId);
+        return Map.of("likeCount", likeCount);
     }
 
 
     @DeleteMapping("/unlike/{postId}")
-    public ResponseEntity<Void> unlikePost(@PathVariable("postId") Long postId) {
-        // Retrieve the authenticated user
+    @ResponseBody
+    public Map<String, Object> unlikePost(@PathVariable("postId") Long postId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
 
-        if (currentUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if unauthenticated
+        if (currentUser.isPresent()) {
+            User user = currentUser.get();
+            Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+            if (existingLike != null) {
+                likeRepository.delete(existingLike);
+            }
         }
 
-        User user = currentUser.get();
-        Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
-
-        // Remove the like if it exists
-        if (existingLike != null) {
-            likeRepository.delete(existingLike);
-        }
-
-        return ResponseEntity.ok().build(); // Return 200 OK
+        long likeCount = likeRepository.countByPostId(postId);
+        return Map.of("likeCount", likeCount);
     }
 
 

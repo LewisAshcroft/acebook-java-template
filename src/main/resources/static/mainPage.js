@@ -53,41 +53,30 @@ function searchFunction() {
 }
 
 async function likePost(likeButton) {
-    // Locate the parent post div
     const postElement = likeButton.closest('.Post');
-    if (!postElement) {
-        console.error('Unable to find the parent post element.');
-        return;
-    }
-
-    // Extract the post ID from the `data-post-id` attribute
     const postId = postElement.getAttribute('data-post-id');
-    if (!postId) {
-        console.error('Post ID not found on the parent post element.');
-        return;
-    }
-
-    // Check if the post is already liked
     const isLiked = likeButton.classList.contains('liked');
 
     try {
-        // Send request to backend
         const method = isLiked ? 'DELETE' : 'POST';
-        const response = await fetch(`${isLiked ? `/unlike/${postId}` : `/like/${postId}`}`, {
+        const url = isLiked ? `/unlike/${postId}` : `/like/${postId}`;
+
+        const response = await fetch(url + `?userId=${userId}`, {
             method: method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
         });
 
         if (response.ok) {
-            // Toggle the like button's appearance
+            // Get the updated like count from the response (optional)
+            const { likeCount } = await response.json();
+
+            // Update the button's appearance
             if (isLiked) {
                 likeButton.classList.remove('liked');
-                likeButton.innerHTML = '♡'; // Unlike
+                likeButton.innerHTML = `♡ (${likeCount})`; // Unlike
             } else {
                 likeButton.classList.add('liked');
-                likeButton.innerHTML = '❤️'; // Like
+                likeButton.innerHTML = `❤️ (${likeCount})`; // Like
             }
         } else {
             console.error(`Failed to update like status for post ${postId}:`, response.statusText);
