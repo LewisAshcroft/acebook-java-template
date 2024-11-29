@@ -8,6 +8,8 @@ import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -64,45 +66,53 @@ public class PostsController {
         return new RedirectView("/posts");
     }
 
-  
+
     @PostMapping("/like/{postId}")
-    public String likePost(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId) {
+    public String likePost(@PathVariable("postId") Long postId) {
+        // Retrieve the authenticated user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
 
-        // Fetch the post and user by their IDs
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+        if (currentUser.isEmpty()) {
+            return "redirect:/posts"; // Redirect if user is not authenticated
+        }
 
-        // Check if the user has already liked the post
-        Like existingLike = likeRepository.findByUserIdAndPostId(userId, postId);
+        User user = currentUser.get();
+        Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+
+        // Add a like if not already liked
         if (existingLike == null) {
-            // Create a new like if it doesn't exist
             Like like = new Like();
-            like.setPost(post);
+            like.setPost(postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id")));
             like.setUser(user);
             likeRepository.save(like);
         }
 
-        // Redirect to the posts page (or wherever you want)
-        return "redirect:/posts";  // Ensure this path is correct
+        return "redirect:/posts";
     }
 
 
-
-    // Unlike a post
     @DeleteMapping("/unlike/{postId}")
-    public String unlikePost(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+    public ResponseEntity<Void> unlikePost(@PathVariable("postId") Long postId) {
+        // Retrieve the authenticated user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
 
-        // Find and delete the like
-        Like existingLike = likeRepository.findByUserIdAndPostId(userId, postId);
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if unauthenticated
+        }
+
+        User user = currentUser.get();
+        Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+
+        // Remove the like if it exists
         if (existingLike != null) {
             likeRepository.delete(existingLike);
         }
 
-        // Redirect to the posts page (or wherever you want)
-        return "redirect:/posts";
+        return ResponseEntity.ok().build(); // Return 200 OK
     }
+
 
 
     @PostMapping("/delete/{id}")

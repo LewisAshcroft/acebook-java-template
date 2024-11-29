@@ -33,7 +33,6 @@ function searchFunction() {
 
 }
 
-
 async function likePost(likeButton) {
     // Locate the parent post div
     const postElement = likeButton.closest('.Post');
@@ -52,13 +51,10 @@ async function likePost(likeButton) {
     // Check if the post is already liked
     const isLiked = likeButton.classList.contains('liked');
 
-    // Assuming userId is available in a global JS variable
-    //const userId = 1; // Replace with actual user ID from session or another source
-
     try {
         // Send request to backend
         const method = isLiked ? 'DELETE' : 'POST';
-        const response = await fetch(`/like/${postId}?userId=${userId}`, {
+        const response = await fetch(`${isLiked ? `/unlike/${postId}` : `/like/${postId}`}`, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',

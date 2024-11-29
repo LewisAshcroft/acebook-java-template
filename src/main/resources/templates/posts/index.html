@@ -38,7 +38,7 @@
 
         <div class="Feed">
             <div th:each="post : ${posts}">
-                <div class="Post" th:id="${i}">
+                <div class="Post" th:id="${i}" th:attr="data-post-id=${post.id}">
                     <div class="Username">
                         <span th:text="${post.userId}"></span>
                     </div>
