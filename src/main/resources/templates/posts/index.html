@@ -43,8 +43,10 @@
                         <span th:text="${post.userId}"></span>
                     </div>
 
+                    <img id="post-image" th:src="${post.picture}" alt="">
+                    
                     <div class="TextBox">
-                               <span th:text="${post.content}"></span>
+                        <span th:text="${post.content}"></span>
                     </div>
                     <div class="BottomBar">
                         <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
