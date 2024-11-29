@@ -43,7 +43,14 @@
                         <span th:text="${post.userId}"></span>
                     </div>
 
-                    <img id="post-image" th:src="${post.picture}" alt="">
+                    <div th:if="${post.picture.endsWith('mp4')}">
+                        <video id="post-image" th:src="${post.picture}" alt="" controls />
+                    </div>
+
+                    <!-- Image block, if file is .png -->
+                    <div th:if="${post.picture.endsWith('png') or post.picture.endsWith('jpg') or post.picture.endsWith('jpeg') or post.picture.endsWith('gif')}">
+                        <img id="post-image" th:src="${post.picture}" alt="" />
+                    </div>
                     
                     <div class="TextBox">
                         <span th:text="${post.content}"></span>
