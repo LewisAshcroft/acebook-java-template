@@ -8,6 +8,8 @@ import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PostsController {
@@ -48,11 +51,16 @@ public class PostsController {
 
     @PostMapping("/new-post")
     public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
-        Post post = new Post("", "", 1L, false, null, null);
-        String uploadAddress = storageService.save(file);
-        post.setPicture(uploadAddress);
-        post.setContent(content);
-        postRepository.save(post);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+        if (currentUser.isPresent()) {
+            User activeUser = currentUser.get();
+            Post post = new Post("", "", activeUser.getId(), false, null, null);
+            String uploadAddress = storageService.save(file);
+            post.setPicture(uploadAddress);
+            post.setContent(content);
+            postRepository.save(post);
+        }
         return new RedirectView("/posts");
     }
 

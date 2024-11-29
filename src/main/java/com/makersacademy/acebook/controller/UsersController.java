@@ -5,7 +5,10 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +42,17 @@ public class UsersController {
     @GetMapping("/profile/{id}")
     public ModelAndView userProfile(@PathVariable Long id, Model model) {
         ModelAndView modelAndView = new ModelAndView("/user/profile");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+        if (currentUser.isPresent()) {
+            User activeUser = currentUser.get();
+            modelAndView.addObject("activeUser", activeUser);
+        }
+
         User user = userRepository.findById(id).get();
         modelAndView.addObject("user", user);
+
         Iterable<Post> posts = postRepository.findAllByUserId(id);
         modelAndView.addObject("posts", posts);
         return modelAndView;
