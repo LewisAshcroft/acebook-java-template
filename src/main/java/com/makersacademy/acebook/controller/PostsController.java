@@ -97,9 +97,10 @@ public class PostsController {
     }
 
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/posts/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
+        System.out.println("Attempting to delete post with ID:" +postId);
         postRepository.deleteById(postId);
-        return "redirect:/post";
+        return "redirect:/posts";
     }
 }
