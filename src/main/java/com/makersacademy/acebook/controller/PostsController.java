@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class PostsController {
@@ -35,15 +34,32 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String index(Model model) {
-        List<Post> posts = postRepository.findAll();
-        List<User> users = userRepository.findAll();
-        model.addAttribute("posts", posts);
-        model.addAttribute("post", new Post());
-        model.addAttribute("users", users);
-        model.addAttribute("user", new User());
+        // Retrieve all posts
+        Iterable<Post> posts = postRepository.findAll();
 
+        // Get the authenticated user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+
+        // Map posts and attach "isLiked" status
+        List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
+        for (Post post : posts) {
+            Map<String, Object> postWithStatus = new HashMap<>();
+            postWithStatus.put("post", post);
+            if (currentUser.isPresent()) {
+                User user = currentUser.get();
+                boolean isLiked = likeRepository.findByUserIdAndPostId(user.getId(), post.getId()) != null;
+                postWithStatus.put("isLiked", isLiked);
+            } else {
+                postWithStatus.put("isLiked", false);
+            }
+            postsWithLikeStatus.add(postWithStatus);
+        }
+
+        model.addAttribute("postsWithLikeStatus", postsWithLikeStatus);
         return "posts/index";
     }
+
 
     @GetMapping("/new-post")
     public String newPost(Model model) {

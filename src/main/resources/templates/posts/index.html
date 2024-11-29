@@ -37,25 +37,30 @@
         </script>
 
         <div class="Feed">
-            <div th:each="post : ${posts}">
-                <div class="Post" th:id="${i}" th:attr="data-post-id=${post.id}">
+            <div th:each="postData : ${postsWithLikeStatus}">
+                <div class="Post" th:id="${postData.post.id}" th:data-post-id="${postData.post.id}">
                     <div class="Username">
-                        <span th:text="${post.userId}"></span>
+                        <span th:text="${postData.post.userId}"></span>
                     </div>
 
-                    <img id="post-image" th:src="${post.picture}" alt="">
-                    
+                    <img id="post-image" th:src="${postData.post.picture}" alt="">
+
                     <div class="TextBox">
-                        <span th:text="${post.content}"></span>
+                        <span th:text="${postData.post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
+                        <div class="TimeStamp">
+                            <span th:text="${postData.post.createdAt}"></span>
+                        </div>
                         <div class="BottomBar">
-
-                            <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like" onclick="likePost(this)" >♡</button>
-                            <button class="Delete>">Delete &nbsp</button>
-
+                            <button class="Comment">Comment &nbsp</button>
+                            <button class="Like"
+                                    th:classappend="${postData.isLiked} ? 'liked' : ''"
+                                    th:data-is-liked="${postData.isLiked}"
+                                    onclick="likePost(this)">
+                                <span th:text="${postData.isLiked} ? '❤️' : '♡'"></span>
+                            </button>
+                            <button class="Delete">Delete &nbsp</button>
                         </div>
                     </div>
                 </div>

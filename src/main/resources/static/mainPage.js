@@ -2,6 +2,25 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Find all like buttons
+    const likeButtons = document.querySelectorAll('.Like');
+    likeButtons.forEach(button => {
+        // Check the data-is-liked attribute
+        const isLiked = button.getAttribute('data-is-liked') === 'true';
+
+        // Update the button's appearance
+        if (isLiked) {
+            button.classList.add('liked');
+            button.innerHTML = '❤️'; // Set to "liked" state
+        } else {
+            button.classList.remove('liked');
+            button.innerHTML = '♡'; // Set to "unliked" state
+        }
+    });
+});
+
+
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
