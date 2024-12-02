@@ -59,7 +59,7 @@
                                     th:data-is-liked="${postData.isLiked}"
                                     onclick="likePost(this)">
                                 <span th:text="${postData.isLiked} ? '❤️' : '♡'"></span>
-                                <span th:text="' (' + ${postData.likeCount} + ')'"></span>
+                                <span th:text="' (' + (${postData.likeCount} ?: 0) + ')'"></span>
                             </button>
 
                             <button class="Delete">Delete &nbsp</button>

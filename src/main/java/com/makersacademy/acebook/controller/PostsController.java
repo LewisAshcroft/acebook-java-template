@@ -57,7 +57,7 @@ public class PostsController {
 
             // Add the like count
             long likeCount = likeRepository.countByPostId(post.getId());
-            postWithStatus.put("likeCount", likeCount);
+            postWithStatus.put("likeCount", likeCount > 0 ? likeCount : 0);
 
             postsWithLikeStatus.add(postWithStatus);
         }
