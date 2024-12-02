@@ -61,8 +61,10 @@
 
                             <button  class="Comment">Comment &nbsp</button>
                             <button class="Like" onclick="likePost(this)" >♡</button>
-                            <button class="Delete>">Delete &nbsp</button>
 
+                            <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
+                                <button type="submit" class="Delete>">Delete &nbsp</button>
+                            </form>
                         </div>
                     </div>
                 </div>
