@@ -3,16 +3,13 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-        <link rel="stylesheet" href="mainPage.css">
-        <script rel="mainPage.js" src="mainPage.js"></script>
-        <div class="Banner"> <h1>Acebook</h1> <div class="ButtonHolder"> <h1>Post</h1> <h1>Profile</h1> </div> </div>
+        <link rel="stylesheet" href="main.css">
+        <script rel="main.js" src="main.js"></script>
+        <div class="Banner"> <button class="BigButton">Acebook</button> <div class="ButtonHolder"> <button class="MediumButton">Post</button> <button class="MediumButton">Profile</button> </div> </div>
     </head>
     <body>
 
-
-
-
-    <div class="Content">
+    <div class="Center">
 
         <div class="SearchHolder">
 
@@ -33,14 +30,15 @@
         </div>
 
         <script>
-            var userId = [[${user.id}]];
+            var userId = 1;
         </script>
 
         <div class="Feed">
             <div th:each="post : ${posts}">
-                <div class="Post" th:id="${post.id}">
-                <div class="Username">
-                        <span th:text="${post.userId}"></span>
+                <div class="Post" th:id="${i}">
+                    <div class="Username">
+                        <div th:each="user : ${users}">
+                            <span th:if="${user.id == post.userId}" th:text="${user.username}"></span>
                     </div>
 
                     <div th:if="${post.picture.endsWith('mp4')}">
@@ -51,7 +49,7 @@
                     <div th:if="${post.picture.endsWith('png') or post.picture.endsWith('jpg') or post.picture.endsWith('jpeg') or post.picture.endsWith('gif')}">
                         <img id="post-image" th:src="${post.picture}" alt="" />
                     </div>
-
+                    
                     <div class="TextBox">
                         <span th:text="${post.content}"></span>
                     </div>
@@ -60,13 +58,9 @@
                         <div class="BottomBar">
 
                             <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
+                            <button class="Like" onclick="likePost(this)" >♡</button>
+                            <button class="Delete>">Delete &nbsp</button>
 
-
-
-                            <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
-                                <button type="submit" class="Delete">Delete &nbsp</button>
-                            </form>
                         </div>
                     </div>
                 </div>
