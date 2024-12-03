@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Friend Request</title>
+  <script>
+    async function removeFriend(friendId) {
+      const confirmed = confirm("Are you sure you wish to end this friendship?");
+      if (!confirmed) {
+        return;
+      }
+      try {
+        const response = await fetch(`/friends/remove/${friendId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          alert('Friend removed successfully!');
+        } else {
+          alert('Failed to remove friend.');
+          console.error(await response.text());
+        }
+      } catch (error) {
+        console.error('Error removing friend:', error);
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>Test Accept Friend Request</h1>
+<button onclick="removeFriend(21)">Remove Friendship Between Logged-In User and User 21</button>
+</body>
+</html>
