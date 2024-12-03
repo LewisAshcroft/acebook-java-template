@@ -20,13 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
+        for (let i = 0; i < dropdowns.length; i++) {
+            let openDropdown = dropdowns[i];
             if (openDropdown.classList.contains('show')) {
                 openDropdown.classList.remove('show');
             }
@@ -39,31 +37,22 @@ function searchFunction() {
     let search = document.getElementById("searchbar").value;
     console.log("This is what you searched: " + search);
 
-
     for (let i = 0; i < elements.length; i++) {
         var element = elements[i];
-       if (search == "" || search == i+1){
+        if (search === "" || search == i + 1) {
             element.classList.remove("hide");
-       } else {
+        } else {
             element.classList.add("hide");
-       }
-
+        }
     }
-
 }
 
 async function likePost(likeButton) {
-    // Locate the parent post div
-    const postElement = likeButton.closest('.Post');
-    if (!postElement) {
-        console.error('Unable to find the parent post element.');
-        return;
-    }
+    // Locate the post ID from the button's data attribute
+    const postId = likeButton.getAttribute('data-post-id');
 
-    // Extract the post ID from the `data-post-id` attribute
-    const postId = postElement.getAttribute('data-post-id');
     if (!postId) {
-        console.error('Post ID not found on the parent post element.');
+        console.error('Post ID not found');
         return;
     }
 
@@ -71,9 +60,10 @@ async function likePost(likeButton) {
     const isLiked = likeButton.classList.contains('liked');
 
     try {
-        // Send request to backend
+        // Determine the request method: POST to like, DELETE to unlike
         const method = isLiked ? 'DELETE' : 'POST';
-        const response = await fetch(`${isLiked ? `/unlike/${postId}` : `/like/${postId}`}`, {
+        const endpoint = isLiked ? `/unlike/${postId}` : `/like/${postId}`;
+        const response = await fetch(endpoint, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
@@ -81,20 +71,18 @@ async function likePost(likeButton) {
         });
 
         if (response.ok) {
-            // Toggle the like button's appearance
+            // Toggle the button's appearance based on whether the post is liked or unliked
             if (isLiked) {
-                likeButton.classList.remove('liked');
-                likeButton.innerHTML = '♡'; // Unlike
+                likeButton.classList.remove('liked'); // Remove the 'liked' class
+                likeButton.innerHTML = '♡'; // Change to 'unlike' symbol
             } else {
-                likeButton.classList.add('liked');
-                likeButton.innerHTML = '❤️'; // Like
+                likeButton.classList.add('liked'); // Add the 'liked' class
+                likeButton.innerHTML = '❤️'; // Change to 'like' symbol
             }
         } else {
-            console.error(`Failed to update like status for post ${postId}:`, response.statusText);
-            alert('Failed to update like status. Please try again.');
+            console.error(`Failed to update like status for post ${postId}`);
         }
     } catch (error) {
-        console.error(`Error updating like status for post ${postId}:`, error);
-        alert('An error occurred while updating the like status.');
+        console.error(`Error updating like status:`, error);
     }
 }

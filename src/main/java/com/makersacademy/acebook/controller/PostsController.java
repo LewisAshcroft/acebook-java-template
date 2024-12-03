@@ -6,10 +6,9 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.LikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.AuthService;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -31,6 +32,8 @@ public class PostsController {
     FilesStorageService storageService;
     @Autowired
     LikeRepository likeRepository;
+    @Autowired
+    AuthService authService;
 
     @GetMapping("/posts")
     public String index(Model model) {
@@ -46,6 +49,7 @@ public class PostsController {
         for (Post post : posts) {
             Map<String, Object> postWithStatus = new HashMap<>();
             postWithStatus.put("post", post);
+
             if (currentUser.isPresent()) {
                 User user = currentUser.get();
                 boolean isLiked = likeRepository.findByUserIdAndPostId(user.getId(), post.getId()) != null;
@@ -60,7 +64,6 @@ public class PostsController {
         return "posts/index";
     }
 
-
     @GetMapping("/new-post")
     public String newPost(Model model) {
         model.addAttribute("post", new Post());
@@ -69,19 +72,32 @@ public class PostsController {
 
     @PostMapping("/new-post")
     public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
-        if (currentUser.isPresent()) {
-            User activeUser = currentUser.get();
-            Post post = new Post("", "", activeUser.getId(), false, null, null);
-            String uploadAddress = storageService.save(file);
-            post.setPicture("/files/" + uploadAddress);
-            post.setContent(content);
-            postRepository.save(post);
+        Long userId = authService.getCurrentUserId(); // Get the currently logged-in user's ID
+
+        if (userId != null) {
+            Optional<User> currentUser = userRepository.findById(userId); // Find the user by user_id
+
+            if (currentUser.isPresent()) {
+                User activeUser = currentUser.get();
+                Post post = new Post("", "", activeUser.getId(), false, null, null);
+
+                // Set timestamps
+                LocalDateTime now = LocalDateTime.now();
+                post.setCreatedAt(Timestamp.valueOf(now));
+                post.setUpdatedAt(Timestamp.valueOf(now));
+
+                // Set content of the post
+                String uploadAddress = storageService.save(file);
+                post.setPicture("/files/" + uploadAddress);
+                post.setContent(content);
+
+                // Set as public and save post to the database
+                post.setIsPublic(true);
+                postRepository.save(post);
+            }
         }
         return new RedirectView("/posts");
     }
-
 
     @PostMapping("/like/{postId}")
     public String likePost(@PathVariable("postId") Long postId) {
@@ -107,15 +123,14 @@ public class PostsController {
         return "redirect:/posts";
     }
 
-
     @DeleteMapping("/unlike/{postId}")
-    public ResponseEntity<Void> unlikePost(@PathVariable("postId") Long postId) {
+    public String unlikePost(@PathVariable("postId") Long postId) {
         // Retrieve the authenticated user
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
 
         if (currentUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if unauthenticated
+            return "redirect:/posts"; // Redirect if unauthenticated
         }
 
         User user = currentUser.get();
@@ -126,14 +141,13 @@ public class PostsController {
             likeRepository.delete(existingLike);
         }
 
-        return ResponseEntity.ok().build(); // Return 200 OK
+        return "redirect:/posts";
     }
 
-
-
-    @PostMapping("/delete/{id}")
+    @PostMapping("/posts/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
+        System.out.println("Attempting to delete post with ID:" + postId);
         postRepository.deleteById(postId);
-        return "redirect:/post";
+        return "redirect:/posts";
     }
 }
