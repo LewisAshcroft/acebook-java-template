@@ -64,4 +64,6 @@ public class UsersController {
         userRepository.save(user);
         return new RedirectView("/posts");
     }
+
+
 }

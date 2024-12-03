@@ -2,34 +2,50 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>Acebook</title>
+    <title>Acebook - Profile</title>
     <link rel="stylesheet" th:href="@{/main.css}">
-    <script rel="main.js" src="/main.js"></script>
-    <div class="Banner"> <button class="BigButton">Acebook</button> <div class="ButtonHolder"> <button class="MediumButton">Post</button> <button class="MediumButton">Profile</button> </div> </div>
+    <script src="/main.js"></script>
 </head>
 <body>
-    <div class="Center">
-        <div class="Feed">
-            <p id="username" th:text="${user.username}"></p>
-            <div class="TextBox" id="bio" th:text="${user.bio}"></div>
-                <div class="Post">
-                    <ul th:each="post: ${posts}">
-                        <div th:text="${post.content}" />
-                    </ul>
-                </div>
-        </div>
-    </div>
 
-    <div th:switch="${activeUser.id}">
-        <div th:case="${user.id}">
-            <form action="#" th:action="@{/profile/{id}(id=${user.id})}" th:object="${user}" method="post">
-                <p>Username: <input type="text" th:field="*{username}" /></p>
-                <p>Bio: <input type="text" th:field="*{bio}" /></p>
-                <p>Email: <input type="text" th:field="${user.email}" /></p>
-                <input type="text" th:field="${user.auth0Id}" hidden/>
-                <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-            </form>
+<!-- Banner / Header -->
+<div class="Banner">
+    <button class="BigButton">Acebook</button>
+    <div class="ButtonHolder">
+        <button class="MediumButton">Post</button>
+        <button class="MediumButton">Profile</button>
+    </div>
+</div>
+
+<!-- Profile Content -->
+<div class="Center">
+    <!-- Feed Section -->
+    <div class="Feed">
+        <!-- User Info Section -->
+        <div class="ProfileInfo">
+            <h1 class="ProfileUsername" id="username" th:text="${user.username}"></h1>
+            <div class="Bio" id="bio" th:text="${user.bio}"></div>
+            <div class="Email" th:text="${user.email}"></div>
+        </div>
+
+        <!-- User Posts Section -->
+        <div class="UserPosts">
+            <h2>User Posts:</h2>
+            <div class="Post">
+                <ul th:each="post : ${posts}">
+                    <li th:text="${post.content}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Edit Profile Button (only visible to the logged-in user when viewing their profile) -->
+        <div th:switch="${activeUser.id}">
+            <div th:case="${user.id}">
+                <a href="#" th:href="@{/profile/{id}/edit(id=${user.id})}" class="BigButton">Edit Profile</a>
+            </div>
         </div>
     </div>
+</div>
+
 </body>
 </html>

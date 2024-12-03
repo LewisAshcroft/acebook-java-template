@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Acebook - Edit Profile</title>
+  <link rel="stylesheet" th:href="@{/main.css}">
+  <script src="/main.js"></script>
+</head>
+<body>
+
+<!-- Banner / Header -->
+<div class="Banner">
+  <button class="BigButton">Acebook</button>
+  <div class="ButtonHolder">
+    <button class="MediumButton">Post</button>
+    <button class="MediumButton">Profile</button>
+  </div>
+</div>
+
+<!-- Edit Profile Content -->
+<div class="Center">
+  <div class="Feed">
+    <h2>Edit Profile</h2>
+
+    <!-- Edit Profile Form -->
+    <form action="#" th:action="@{/profile/{id}(id=${user.id})}" th:object="${user}" method="post" class="ProfileForm">
+      <div class="FormField">
+        <label for="username">Username:</label>
+        <input type="text" th:field="*{username}" id="username" />
+      </div>
+      <div class="FormField">
+        <label for="bio">Bio:</label>
+        <input type="text" th:field="*{bio}" id="bio" />
+      </div>
+      <div class="FormField">
+        <label for="email">Email:</label>
+        <input type="text" th:field="*{email}" id="email" />
+      </div>
+      <input type="text" th:field="*{auth0Id}" hidden />
+      <div class="FormActions">
+        <input type="submit" value="Submit" class="MediumButton" />
+        <input type="reset" value="Reset" class="MediumButton" />
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

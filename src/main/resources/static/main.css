@@ -47,10 +47,10 @@ body {
 }
 
 .ButtonHolder .Button:hover {
-    background-color: #155f91; /*dark blue*/
+    background-color: #155f91; /* Dark blue */
 }
 
-
+/* Centering content in the middle */
 .Center {
     margin: 225px auto 0;
     display: grid;
@@ -58,7 +58,7 @@ body {
     width: 100%;
 }
 
-
+/* Search and Dropdown styling */
 .SearchHolder {
     display: flex;
     justify-content: space-between;
@@ -118,10 +118,10 @@ body {
 }
 
 .dropdown .dropdown-content a:hover {
-    background-color: #f1f1f1; /*light grey*/
+    background-color: #f1f1f1; /* Light grey */
 }
 
-
+/* Feed and Post Styling */
 .Feed {
     border: none;
     padding: 20px;
@@ -153,7 +153,7 @@ body {
     width: 180px;
     display: flex;
     justify-content: space-between;
-    color: #8a8a8a; /*medium grey*/
+    color: #8a8a8a; /* Medium grey */
     font-size: 12px;
 }
 
@@ -198,14 +198,14 @@ body {
     margin-top: 10px;
 }
 
-
+/* Button Styling */
 .BigButton {
     height: 50px;
     width: 200px;
     border-radius: 25px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    background-color: #1877f2;
+    background-color: #1877f2; /* Facebook blue */
     color: white;
     font-size: 16px;
     border: none;
@@ -213,7 +213,7 @@ body {
 }
 
 .BigButton:hover {
-    background-color: #155f91;
+    background-color: #155f91; /* Dark blue on hover */
     transform: scale(1.05);
 }
 
