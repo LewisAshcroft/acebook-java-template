@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: acebook_springboot_production
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    networks:
+      - acebook_network
+
+  app:
+    build:
+      context: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/acebook_springboot_production
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password123
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    networks:
+      - acebook_network
+
+networks:
+  acebook_network:
+    driver: bridge
