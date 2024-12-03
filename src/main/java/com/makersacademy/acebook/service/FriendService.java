@@ -31,8 +31,8 @@ public class FriendService {
         friendRepository.save(friend);
     }
 
-    public void acceptFriendRequest(Long recipientId) {
-        Long senderId = authService.getCurrentUserId();  // Get current user's ID
+    public void acceptFriendRequest(Long senderId) {
+        Long recipientId = authService.getCurrentUserId();  // Get current user's ID
         FriendId friendId = new FriendId(senderId, recipientId);
 
         Friend friendship = friendRepository.findById(friendId)
@@ -46,11 +46,13 @@ public class FriendService {
         friendRepository.save(friendship);
     }
 
-    public void removeFriend(Long userId1, Long userId2) {
-        FriendId friendId = new FriendId(userId1, userId2);
-        Friend friendship = friendRepository.findById(friendId)
-                .orElseThrow(() -> new IllegalArgumentException("Friendship not found"));
-
-        friendRepository.delete(friendship);  // Remove the friendship
+    public void removeFriend(Long friendId) {
+        Long currentUserId = authService.getCurrentUserId();
+        if (currentUserId == null) {
+            throw new IllegalArgumentException("User not authenticated.");
+        }
+        // Delete the friendship in either direction.
+        friendRepository.deleteById(new FriendId(currentUserId, friendId));
+        friendRepository.deleteById(new FriendId(friendId, currentUserId));
     }
 }

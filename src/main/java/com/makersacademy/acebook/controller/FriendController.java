@@ -60,8 +60,8 @@ public class FriendController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
         try {
-            friendService.removeFriend(userId, friendId);
-            return ResponseEntity.ok("Friend removed");
+            friendService.removeFriend(friendId);
+            return ResponseEntity.ok("Friend removed successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
