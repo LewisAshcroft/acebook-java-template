@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -54,21 +53,28 @@ function searchFunction() {
 
 }
 
+
 async function likePost(likeButton) {
     const postElement = likeButton.closest('.Post');
     const postId = postElement.getAttribute('data-post-id');
     const isLiked = likeButton.classList.contains('liked');
+     if (!postId) {
+          console.error('Post ID not found');
+          return;
+      }
 
     try {
         const method = isLiked ? 'DELETE' : 'POST';
         const url = isLiked ? `/unlike/${postId}` : `/like/${postId}`;
 
         const response = await fetch(url + `?userId=${userId}`, {
+
             method: method,
             headers: { 'Content-Type': 'application/json' },
         });
 
         if (response.ok) {
+
             // Get the updated like count from the response (optional)
             const { likeCount } = await response.json();
 
@@ -81,11 +87,10 @@ async function likePost(likeButton) {
                 likeButton.innerHTML = `❤️ (${likeCount})`; // Like
             }
         } else {
-            console.error(`Failed to update like status for post ${postId}:`, response.statusText);
-            alert('Failed to update like status. Please try again.');
+            console.error(`Failed to update like status for post ${postId}`);
         }
     } catch (error) {
-        console.error(`Error updating like status for post ${postId}:`, error);
-        alert('An error occurred while updating the like status.');
+        console.error(`Error updating like status:`, error);
     }
 }
+

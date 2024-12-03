@@ -9,8 +9,7 @@ import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.AuthService;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PostsController {
@@ -37,11 +39,21 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String index(Model model) {
+
         // Retrieve all posts
         Iterable<Post> posts = postRepository.findAll();
 
         // Get the authenticated user
-        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Long userId = authService.getCurrentUserId(); // Get the currently logged-in user's ID
+          if (userId != null) {
+            // Fetch the actual user from the database using their userId
+            User currentUser = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            model.addAttribute("user", currentUser); // Add the actual user to the model
+          } else {
+            // Handle case where user is not authenticated, e.g., redirect to login
+            return "redirect:/login";
+          }
+      
         Optional<User> currentUser = userRepository.findById(userId);
 
         // Map posts and attach "isLiked" status and like count
@@ -63,9 +75,14 @@ public class PostsController {
             postWithStatus.put("likeCount", likeCount > 0 ? likeCount : 0);
 
             postsWithLikeStatus.add(postWithStatus);
-        }
 
-        model.addAttribute("postsWithLikeStatus", postsWithLikeStatus);
+        // Add posts and users to the model
+        List<Post> posts = postRepository.findAll();
+        List<User> users = userRepository.findAll();
+        model.addAttribute("posts", posts);
+        model.addAttribute("users", users);
+        model.addAttribute("post", new Post());
+
         return "posts/index";
     }
 
@@ -78,27 +95,55 @@ public class PostsController {
 
     @PostMapping("/new-post")
     public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
+
         // Get the authenticated user
-        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Long userId = authService.getCurrentUserId(); // Get the currently logged-in user's ID
+          if (userId != null) {
+            // Fetch the actual user from the database using their userId
+            User currentUser = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            model.addAttribute("user", currentUser); // Add the actual user to the model
+          } else {
+            // Handle case where user is not authenticated, e.g., redirect to login
+            return "redirect:/login";
+          }
+      
         Optional<User> currentUser = userRepository.findById(userId);
 
-        if (currentUser.isPresent()) {
-            User activeUser = currentUser.get();
-            Post post = new Post("", "", activeUser.getId(), false, null, null);
-            String uploadAddress = storageService.save(file);
-            post.setPicture("/files/" + uploadAddress);
-            post.setContent(content);
-            postRepository.save(post);
+            if (currentUser.isPresent()) {
+                User activeUser = currentUser.get();
+                Post post = new Post("", "", activeUser.getId(), false, null, null);
+                String uploadAddress = storageService.save(file);
+                post.setPicture("/files/" + uploadAddress);
+                post.setContent(content);
+                postRepository.save(post);
+
+                // Set timestamps
+                LocalDateTime now = LocalDateTime.now();
+                post.setCreatedAt(Timestamp.valueOf(now));
+                post.setUpdatedAt(Timestamp.valueOf(now));
+
+                // Set content of the post
+                String uploadAddress = storageService.save(file);
+                post.setPicture("/files/" + uploadAddress);
+                post.setContent(content);
+
+                // Set as public and save post to the database
+                post.setIsPublic(true);
+                postRepository.save(post);
+            }
         }
         return new RedirectView("/posts");
     }
 
 
+    // POST request to like a post
     @PostMapping("/like/{postId}")
     @ResponseBody
+
     public Map<String, Object> likePost(@PathVariable("postId") Long postId) {
         // Get the authenticated user
-        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Long userId = authService.getCurrentUserId(); 
+      // Get the currently logged-in user's ID
         Optional<User> currentUser = userRepository.findById(userId);
 
         if (currentUser.isPresent()) {
@@ -136,11 +181,10 @@ public class PostsController {
         return Map.of("likeCount", likeCount);
     }
 
-
-
-    @PostMapping("/delete/{id}")
+    @PostMapping("/posts/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
+        System.out.println("Attempting to delete post with ID:" +postId);
         postRepository.deleteById(postId);
-        return "redirect:/post";
+        return "redirect:/posts";
     }
 }

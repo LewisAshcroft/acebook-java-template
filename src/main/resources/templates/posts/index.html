@@ -33,25 +33,30 @@
         </div>
 
         <script>
-            var userId = 1;
+            var userId = [[${user.id}]];
         </script>
 
         <div class="Feed">
-            <div th:each="postData : ${postsWithLikeStatus}">
-                <div class="Post" th:id="${postData.post.id}" th:data-post-id="${postData.post.id}">
-                    <div class="Username">
-                        <span th:text="${postData.post.userId}"></span>
+            <div th:each="post : ${posts}">
+                <div class="Post" th:id="${post.id}">
+                <div class="Username">
+                        <span th:text="${post.userId}"></span>
                     </div>
 
-                    <img id="post-image" th:src="${postData.post.picture}" alt="">
+                    <div th:if="${post.picture.endsWith('mp4')}">
+                        <video id="post-image" th:src="${post.picture}" alt="" controls />
+                    </div>
+
+                    <!-- Image block, if file is .png -->
+                    <div th:if="${post.picture.endsWith('png') or post.picture.endsWith('jpg') or post.picture.endsWith('jpeg') or post.picture.endsWith('gif')}">
+                        <img id="post-image" th:src="${post.picture}" alt="" />
+                    </div>
 
                     <div class="TextBox">
-                        <span th:text="${postData.post.content}"></span>
+                        <span th:text="${post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp">
-                            <span th:text="${postData.post.createdAt}"></span>
-                        </div>
+                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
                             <button class="Comment">Comment &nbsp</button>
                             <button class="Like"
@@ -62,7 +67,10 @@
                                 <span th:text="' (' + (${postData.likeCount} ?: 0) + ')'"></span>
                             </button>
 
-                            <button class="Delete">Delete &nbsp</button>
+                            <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
+                                <button type="submit" class="Delete">Delete &nbsp</button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
