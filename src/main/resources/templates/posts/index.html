@@ -1,79 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Acebook</title>
-        <link rel="stylesheet" href="mainPage.css">
-        <script rel="mainPage.js" src="mainPage.js"></script>
-        <div class="Banner"> <h1>Acebook</h1> <div class="ButtonHolder"> <h1>Post</h1> <h1>Profile</h1> </div> </div>
-    </head>
-    <body>
-
-
-
-
-    <div class="Content">
-
-        <div class="SearchHolder">
-
-            <input class="searchbar" id ="searchbar" type="text" placeholder="Search" oninput="searchFunction()">
-
-            <div class="dropdown">
-
-                <button onclick="myFunction()" class="dropbtn">Sort</button>
-
-                <div id="myDropdown" class="dropdown-content">
-                    <a href="#">Link 1</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
-                </div>
-
-            </div>
-
+<head>
+    <meta charset="UTF-8"/>
+    <title>Acebook</title>
+    <link rel="stylesheet" href="mainPage.css">
+    <script src="mainPage.js" defer></script>
+    <div class="Banner">
+        <h1>Acebook</h1>
+        <div class="ButtonHolder">
+            <h1>Post</h1>
+            <h1>Profile</h1>
         </div>
-
-        <script>
-            var userId = [[${user.id}]];
-        </script>
-
-        <div class="Feed">
-            <div th:each="post : ${posts}">
-                <div class="Post" th:id="${post.id}">
-                <div class="Username">
-                        <span th:text="${post.userId}"></span>
-                    </div>
-
-                    <div th:if="${post.picture.endsWith('mp4')}">
-                        <video id="post-image" th:src="${post.picture}" alt="" controls />
-                    </div>
-
-                    <!-- Image block, if file is .png -->
-                    <div th:if="${post.picture.endsWith('png') or post.picture.endsWith('jpg') or post.picture.endsWith('jpeg') or post.picture.endsWith('gif')}">
-                        <img id="post-image" th:src="${post.picture}" alt="" />
-                    </div>
-
-                    <div class="TextBox">
-                        <span th:text="${post.content}"></span>
-                    </div>
-                    <div class="BottomBar">
-                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
-                        <div class="BottomBar">
-
-                            <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
-
-
-
-                            <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
-                                <button type="submit" class="Delete">Delete &nbsp</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    </div>
+</head>
+<body>
+<div class="Content">
+    <div class="SearchHolder">
+        <input class="searchbar" id="searchbar" type="text" placeholder="Search" oninput="searchFunction()">
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Sort</button>
+            <div id="myDropdown" class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
             </div>
         </div>
-
     </div>
 
-    </body>
+    <script>
+        var userId = [[${user.id}]];
+    </script>
+
+    <div class="Feed">
+        <div th:each="postData : ${postsWithLikeStatus}">
+            <div class="Post" th:id="${postData.post.id}" th:data-post-id="${postData.post.id}">
+                <div class="Username">
+                    <span th:text="${postData.post.userId}"></span>
+                </div>
+
+                <div th:if="${postData.post.picture.endsWith('mp4')}">
+                    <video id="post-image" th:src="${postData.post.picture}" alt="" controls></video>
+                </div>
+                <div th:if="${postData.post.picture.endsWith('png') or postData.post.picture.endsWith('jpg') or postData.post.picture.endsWith('jpeg') or postData.post.picture.endsWith('gif')}">
+                    <img id="post-image" th:src="${postData.post.picture}" alt="">
+                </div>
+
+                <div class="TextBox">
+                    <span th:text="${postData.post.content}"></span>
+                </div>
+                <div class="BottomBar">
+                    <div class="TimeStamp">
+                        <span th:text="${postData.post.createdAt}"></span>
+                    </div>
+                    <div class="BottomBar">
+                        <button class="Comment">Comment &nbsp</button>
+                        <button class="Like"
+                                th:classappend="${postData.isLiked} ? 'liked' : ''"
+                                th:data-post-id="${postData.post.id}"
+                                th:data-is-liked="${postData.isLiked}"
+                                onclick="likePost(this)">
+                            <span th:text="${postData.isLiked} ? '❤️' : '♡'"></span>
+                        </button>
+                        <form th:action="@{posts/delete/{id}(id=${postData.post.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="Delete">Delete &nbsp</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
