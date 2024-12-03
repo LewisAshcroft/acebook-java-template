@@ -6,6 +6,7 @@ import com.makersacademy.acebook.model.User;
 import com.makersacademy.acebook.repository.LikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.AuthService;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,8 @@ public class PostsController {
     FilesStorageService storageService;
     @Autowired
     LikeRepository likeRepository;
+    @Autowired
+    AuthService authService;
 
     @GetMapping("/posts")
     public String index(Model model) {
@@ -38,8 +41,8 @@ public class PostsController {
         Iterable<Post> posts = postRepository.findAll();
 
         // Get the authenticated user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Optional<User> currentUser = userRepository.findById(userId);
 
         // Map posts and attach "isLiked" status and like count
         List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
@@ -75,8 +78,10 @@ public class PostsController {
 
     @PostMapping("/new-post")
     public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+        // Get the authenticated user
+        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Optional<User> currentUser = userRepository.findById(userId);
+
         if (currentUser.isPresent()) {
             User activeUser = currentUser.get();
             Post post = new Post("", "", activeUser.getId(), false, null, null);
@@ -92,8 +97,9 @@ public class PostsController {
     @PostMapping("/like/{postId}")
     @ResponseBody
     public Map<String, Object> likePost(@PathVariable("postId") Long postId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+        // Get the authenticated user
+        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Optional<User> currentUser = userRepository.findById(userId);
 
         if (currentUser.isPresent()) {
             User user = currentUser.get();
@@ -114,8 +120,9 @@ public class PostsController {
     @DeleteMapping("/unlike/{postId}")
     @ResponseBody
     public Map<String, Object> unlikePost(@PathVariable("postId") Long postId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+        // Get the authenticated user
+        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+        Optional<User> currentUser = userRepository.findById(userId);
 
         if (currentUser.isPresent()) {
             User user = currentUser.get();
