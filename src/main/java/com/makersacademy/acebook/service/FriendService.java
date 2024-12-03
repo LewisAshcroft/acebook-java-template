@@ -5,6 +5,11 @@ import com.makersacademy.acebook.model.FriendId;
 import com.makersacademy.acebook.repository.FriendRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class FriendService {
     private final FriendRepository friendRepository;
@@ -54,5 +59,20 @@ public class FriendService {
         // Delete the friendship in either direction.
         friendRepository.deleteById(new FriendId(currentUserId, friendId));
         friendRepository.deleteById(new FriendId(friendId, currentUserId));
+    }
+
+    public List<Map<String, String>> getFriendsByUserId(Long userId) {
+        List<Object[]> results = friendRepository.findFriendNamesByUserId(userId);
+        List<Map<String, String>> friends = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Map<String, String> friend = new HashMap<>();
+            if (result[0] != null && result[1] != null) {
+                friend.put("firstName", (String) result[0]);
+                friend.put("lastName", (String) result[1]);
+                friends.add(friend);
+            }
+        }
+        return friends;
     }
 }

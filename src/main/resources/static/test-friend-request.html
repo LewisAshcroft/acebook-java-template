@@ -3,31 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Friend Request</title>
+  <title>Your Friends</title>
   <script>
-    async function sendFriendRequest(userId) {
+    async function loadFriends() {
       try {
-        const response = await fetch(`/friends/request/${userId}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
+        const response = await fetch('/friends/list');
         if (response.ok) {
-          alert('Friend request sent successfully!');
+          const friends = await response.json();
+          const friendList = document.getElementById('friendList');
+          friendList.innerHTML = ''; // Clear the list before adding new items
+
+          friends.forEach(friend => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${friend.firstName} ${friend.lastName}`;
+            friendList.appendChild(listItem);
+          });
         } else {
-          alert('Failed to send friend request.');
-          console.error(await response.text());
+          console.error('Failed to load friends');
         }
       } catch (error) {
-        console.error('Error sending friend request:', error);
+        console.error('Error fetching friends:', error);
       }
     }
+
+    // Call the function when the page loads
+    window.onload = loadFriends;
   </script>
 </head>
 <body>
-<h1>Test Friend Request</h1>
-<button onclick="sendFriendRequest(16)">Send Friend Request to User 16</button>
+<h1>Your Friends</h1>
+<ul id="friendList">
+  <!-- Friends will be listed here -->
+</ul>
 </body>
 </html>

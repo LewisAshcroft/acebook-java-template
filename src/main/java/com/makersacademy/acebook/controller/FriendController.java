@@ -5,9 +5,15 @@ import com.makersacademy.acebook.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
+@Controller
 @RequestMapping("/friends")
 public class FriendController {
 
@@ -65,5 +71,17 @@ public class FriendController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    // Get a list of the current user's friends
+    @GetMapping("/friend-list")
+    public String getFriendsList(Model model) {
+        Long userId = authService.getCurrentUserId(); // Get the logged-in user's ID
+        if (userId == null) {
+            return "redirect:/login"; // Redirect to login if the user is not logged in
+        }
+        List<Map<String, String>> friends = friendService.getFriendsByUserId(userId); // Get friends' names
+        model.addAttribute("friends", friends); // Add the list of friends to the model
+        return "friend-list"; // Return the view name (test-friends-list.html)
     }
 }
