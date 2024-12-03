@@ -9,6 +9,7 @@ import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.AuthService;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PostsController {
@@ -37,32 +39,28 @@ public class PostsController {
 
     @GetMapping("/posts")
     public String index(Model model) {
-        // Retrieve all posts
-        Iterable<Post> posts = postRepository.findAll();
+        // Get the current user's ID
+        Long userId = authService.getCurrentUserId();
 
-        // Get the authenticated user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
-
-        // Map posts and attach "isLiked" status
-        List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
-        for (Post post : posts) {
-            Map<String, Object> postWithStatus = new HashMap<>();
-            postWithStatus.put("post", post);
-
-            if (currentUser.isPresent()) {
-                User user = currentUser.get();
-                boolean isLiked = likeRepository.findByUserIdAndPostId(user.getId(), post.getId()) != null;
-                postWithStatus.put("isLiked", isLiked);
-            } else {
-                postWithStatus.put("isLiked", false);
-            }
-            postsWithLikeStatus.add(postWithStatus);
+        if (userId != null) {
+            // Fetch the actual user from the database using their userId
+            User currentUser = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            model.addAttribute("user", currentUser); // Add the actual user to the model
+        } else {
+            // Handle case where user is not authenticated, e.g., redirect to login
+            return "redirect:/login";
         }
 
-        model.addAttribute("postsWithLikeStatus", postsWithLikeStatus);
+        // Add posts and users to the model
+        List<Post> posts = postRepository.findAll();
+        List<User> users = userRepository.findAll();
+        model.addAttribute("posts", posts);
+        model.addAttribute("users", users);
+        model.addAttribute("post", new Post());
+
         return "posts/index";
     }
+
 
     @GetMapping("/new-post")
     public String newPost(Model model) {
@@ -72,10 +70,10 @@ public class PostsController {
 
     @PostMapping("/new-post")
     public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
-        Long userId = authService.getCurrentUserId(); // Get the currently logged-in user's ID
+        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
 
         if (userId != null) {
-            Optional<User> currentUser = userRepository.findById(userId); // Find the user by user_id
+            Optional<User> currentUser = userRepository.findById(userId);  // Find the user by user_id
 
             if (currentUser.isPresent()) {
                 User activeUser = currentUser.get();
@@ -99,54 +97,58 @@ public class PostsController {
         return new RedirectView("/posts");
     }
 
+
+    // POST request to like a post
     @PostMapping("/like/{postId}")
-    public String likePost(@PathVariable("postId") Long postId) {
-        // Retrieve the authenticated user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+    @ResponseBody
+    public void likePost(@PathVariable("postId") Long postId) {
+        // Fetch the post by its ID
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid post Id"));
 
-        if (currentUser.isEmpty()) {
-            return "redirect:/posts"; // Redirect if user is not authenticated
+        Long userId = authService.getCurrentUserId();
+        if (userId == null) {
+            throw new IllegalArgumentException("User not authenticated");
         }
 
-        User user = currentUser.get();
-        Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
 
-        // Add a like if not already liked
-        if (existingLike == null) {
-            Like like = new Like();
-            like.setPost(postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post Id")));
-            like.setUser(user);
-            likeRepository.save(like);
-        }
-
-        return "redirect:/posts";
+        // Create a new like
+        Like like = new Like();
+        like.setPost(post);
+        like.setUser(user);
+        likeRepository.save(like);
     }
 
-    @DeleteMapping("/unlike/{postId}")
-    public String unlikePost(@PathVariable("postId") Long postId) {
-        // Retrieve the authenticated user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+    // DELETE request to unlike a post
+    @DeleteMapping("/like/{postId}")
+    @ResponseBody
+    public void unlikePost(@PathVariable("postId") Long postId) {
+        // Fetch the post by its ID
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid post Id"));
 
-        if (currentUser.isEmpty()) {
-            return "redirect:/posts"; // Redirect if unauthenticated
+        Long userId = authService.getCurrentUserId();
+        if (userId == null) {
+            throw new IllegalArgumentException("User not authenticated");
         }
 
-        User user = currentUser.get();
-        Like existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
 
-        // Remove the like if it exists
+        // Find the existing like
+        Like existingLike = likeRepository.findByUserIdAndPostId(userId, postId);
         if (existingLike != null) {
             likeRepository.delete(existingLike);
         }
-
-        return "redirect:/posts";
     }
+
+
 
     @PostMapping("/posts/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
-        System.out.println("Attempting to delete post with ID:" + postId);
+        System.out.println("Attempting to delete post with ID:" +postId);
         postRepository.deleteById(postId);
         return "redirect:/posts";
     }
