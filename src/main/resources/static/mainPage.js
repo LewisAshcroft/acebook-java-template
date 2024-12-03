@@ -2,6 +2,26 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Find all like buttons
+    const likeButtons = document.querySelectorAll('.Like');
+    likeButtons.forEach(button => {
+        // Check the data-is-liked attribute
+        const isLiked = button.getAttribute('data-is-liked') === 'true';
+
+        // Update the button's appearance
+        if (isLiked) {
+            button.classList.add('liked');
+            button.innerHTML = `❤ (${likeCount})`; // Set to "liked" state
+
+        } else {
+            button.classList.remove('liked');
+            button.innerHTML = `♡ (${likeCount})`; // Set to "unliked" state
+
+        }
+    });
+});
+
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -35,35 +55,36 @@ function searchFunction() {
 
 
 async function likePost(likeButton) {
-    // Locate the post ID from the button's data attribute
-    const postId = likeButton.getAttribute('data-post-id');
-
-    if (!postId) {
-        console.error('Post ID not found');
-        return;
-    }
-
-    // Check if the post is already liked by the user
-    const isLiked = likeButton.classList.contains('liked'); // Check if the 'liked' class is present
+    const postElement = likeButton.closest('.Post');
+    const postId = postElement.getAttribute('data-post-id');
+    const isLiked = likeButton.classList.contains('liked');
+     if (!postId) {
+          console.error('Post ID not found');
+          return;
+      }
 
     try {
-        // Determine the request method: POST to like, DELETE to unlike
         const method = isLiked ? 'DELETE' : 'POST';
-        const response = await fetch(`/like/${postId}`, {
+        const url = isLiked ? `/unlike/${postId}` : `/like/${postId}`;
+
+        const response = await fetch(url + `?userId=${userId}`, {
+
             method: method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
         });
 
         if (response.ok) {
-            // Toggle the button's appearance based on whether the post is liked or unliked
+
+            // Get the updated like count from the response (optional)
+            const { likeCount } = await response.json();
+
+            // Update the button's appearance
             if (isLiked) {
-                likeButton.classList.remove('liked');  // Remove the 'liked' class
-                likeButton.innerHTML = '♡';  // Change to 'unlike' symbol
+                likeButton.classList.remove('liked');
+                likeButton.innerHTML = `♡ (${likeCount})`; // Unlike
             } else {
-                likeButton.classList.add('liked');  // Add the 'liked' class
-                likeButton.innerHTML = '❤️';  // Change to 'like' symbol
+                likeButton.classList.add('liked');
+                likeButton.innerHTML = `❤️ (${likeCount})`; // Like
             }
         } else {
             console.error(`Failed to update like status for post ${postId}`);

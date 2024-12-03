@@ -58,15 +58,19 @@
                     <div class="BottomBar">
                         <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
-
-                            <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
-
-
+                            <button class="Comment">Comment &nbsp</button>
+                            <button class="Like"
+                                    th:classappend="${postData.isLiked} ? 'liked' : ''"
+                                    th:data-is-liked="${postData.isLiked}"
+                                    onclick="likePost(this)">
+                                <span th:text="${postData.isLiked} ? '❤️' : '♡'"></span>
+                                <span th:text="' (' + (${postData.likeCount} ?: 0) + ')'"></span>
+                            </button>
 
                             <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
                                 <button type="submit" class="Delete">Delete &nbsp</button>
                             </form>
+
                         </div>
                     </div>
                 </div>
