@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.type.descriptor.jdbc.TimestampWithTimeZoneJdbcType;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -33,8 +34,8 @@ public class Post {
         this.picture = picture;
         this.userId = userId;
         this.isPublic = isPublic;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = (createdAt != null) ? createdAt : Timestamp.valueOf(LocalDateTime.now());
+        this.updatedAt = (updatedAt != null) ? updatedAt : Timestamp.valueOf(LocalDateTime.now());
     }
 
     public String getContent() { return this.content; }
