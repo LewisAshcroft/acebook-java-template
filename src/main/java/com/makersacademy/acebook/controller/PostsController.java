@@ -69,7 +69,11 @@ public class PostsController {
     }
 
     @PostMapping("/new-post")
-    public RedirectView create(@RequestParam("file") MultipartFile file, @RequestParam("content") String content) {
+    public RedirectView create(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("content") String content,
+            @RequestParam(value = "isPrivate", required = false) boolean isPrivate) { // Checkbox value
+
         Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
 
         if (userId != null) {
@@ -77,20 +81,22 @@ public class PostsController {
 
             if (currentUser.isPresent()) {
                 User activeUser = currentUser.get();
-                Post post = new Post("", "", activeUser.getId(), false, null, null);
+                Post post = new Post("", "", activeUser.getId(), true, null, null);
 
                 // Set timestamps
                 LocalDateTime now = LocalDateTime.now();
                 post.setCreatedAt(Timestamp.valueOf(now));
                 post.setUpdatedAt(Timestamp.valueOf(now));
 
-                // Set content of the post
+                // Set content
                 String uploadAddress = storageService.save(file);
                 post.setPicture("/files/" + uploadAddress);
                 post.setContent(content);
 
-                // Set as public and save post to the database
-                post.setIsPublic(true);
+                // Set visibility based on the form checkbox
+                post.setIsPublic(!isPrivate);  // Checkbox: if private is checked, isPublic = false
+
+                // Save post to the database
                 postRepository.save(post);
             }
         }
