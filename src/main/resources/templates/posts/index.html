@@ -56,7 +56,10 @@
                         <span th:text="${post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
+                        <div class="TimeStamp">
+                            <span th:text="${#dates.format(post.createdAt, 'HH:mm d MMM yyyy')}"></span>
+                        </div>
+
                         <div class="BottomBar">
 
                             <button  class="Comment">Comment &nbsp</button>
