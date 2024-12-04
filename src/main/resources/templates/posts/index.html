@@ -37,40 +37,42 @@
         </script>
 
         <div class="Feed">
-            <div th:each="post : ${posts}">
-                <div class="Post" th:id="${post.id}">
-                <div class="Username">
-                        <span th:text="${post.userId}"></span>
+            <div th:each="postData : ${posts}">
+                <div class="Post" th:id="${postData.post.id}" th:attr="data-post-id=${postData.post.id}">
+                    <div class="Username">
+                        <span th:text="${postData.post.userId}"></span>
                     </div>
 
-                    <div th:if="${post.picture.endsWith('mp4')}">
-                        <video id="post-image" th:src="${post.picture}" alt="" controls />
+                    <div th:if="${postData.post.picture.endsWith('mp4')}">
+                        <video id="post-image" th:src="${postData.post.picture}" alt="" controls></video>
                     </div>
 
-                    <!-- Image block, if file is .png -->
-                    <div th:if="${post.picture.endsWith('png') or post.picture.endsWith('jpg') or post.picture.endsWith('jpeg') or post.picture.endsWith('gif')}">
-                        <img id="post-image" th:src="${post.picture}" alt="" />
+                    <div th:if="${postData.post.picture.endsWith('png') or postData.post.picture.endsWith('jpg') or postData.post.picture.endsWith('jpeg') or postData.post.picture.endsWith('gif')}">
+                        <img id="post-image" th:src="${postData.post.picture}" alt="" />
                     </div>
 
                     <div class="TextBox">
-                        <span th:text="${post.content}"></span>
+                        <span th:text="${postData.post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
+                        <div class="TimeStamp"><span th:text="${postData.post.createdAt}"></span></div>
                         <div class="BottomBar">
-
-                            <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
-
-
-
-                            <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
+                            <button class="Comment">Comment &nbsp</button>
+                            <button class="Like"
+                                    th:classappend="${postData.isLiked} ? 'liked' : ''"
+                                    th:data-is-liked="${postData.isLiked}"
+                                    onclick="likePost(this)">
+                                <span th:text="${postData.isLiked} ? '❤️' : '♡'"></span>
+                                <span th:text="' (' + (${postData.likeCount} ?: 0) + ')'"></span>
+                            </button>
+                            <form th:action="@{posts/delete/{id}(id=${postData.post.id})}" method="post" style="display: inline;">
                                 <button type="submit" class="Delete">Delete &nbsp</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
