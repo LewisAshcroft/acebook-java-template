@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Block User</title>
+  <script>
+    async function blockUser(userId) {
+      try {
+        const response = await fetch(`/friends/block/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          alert('User blocked successfully!');
+        } else {
+          alert('Failed to block user.');
+          console.error(await response.text());
+        }
+      } catch (error) {
+        console.error('Error blocking user:', error);
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>Test Block User</h1>
+<button onclick="blockUser(16)">Block User 16</button>
+</body>
+</html>
