@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,13 +93,14 @@ public class FriendController {
 
     // Block another user
     @PostMapping("/block/{userId}")
-    public String blockUser(@PathVariable("userId") Long userIdToBlock) {
+    public ResponseEntity<String> blockUser(@PathVariable("userId") Long userIdToBlock) {
         try {
             Long currentUserId = authService.getCurrentUserId();
 
             // Ensure the user is authenticated and not blocking themselves
             if (currentUserId == null || currentUserId.equals(userIdToBlock)) {
-                return "redirect:/error"; // Handle invalid self-blocking or unauthenticated users
+                // Return a 400 Bad Request if the user is trying to block themselves or is not authenticated
+                return ResponseEntity.badRequest().body("You cannot block yourself or you're not authenticated.");
             }
 
             // Check if a relationship exists between the two users (blocked or not)
@@ -121,10 +123,38 @@ public class FriendController {
                 friendRepository.save(newBlock);
             }
 
-            return "redirect:/"; // Redirect to home page or profile page after blocking
+            // Return a success response
+            return ResponseEntity.ok("User blocked successfully!");
         } catch (Exception e) {
             e.printStackTrace(); // Log the exception to help identify the problem
-            return "redirect:/error"; // Redirect to error page if an exception occurs
+            // Return a 500 Internal Server Error if something goes wrong
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to block user. Please try again later.");
         }
+    }
+
+
+    // Unblock a user who is currently blocked
+    @DeleteMapping("/unblock/{userId}")
+    @Transactional
+    public ResponseEntity<String> unblockUser(@PathVariable("userId") Long userIdToUnblock) {
+        Long currentUserId = authService.getCurrentUserId();
+
+        // Ensure the user is authenticated and not trying to unblock themselves
+        if (currentUserId == null || currentUserId.equals(userIdToUnblock)) {
+            // Return a 400 Bad Request if the user is trying to unblock themselves or is not authenticated
+            return ResponseEntity.badRequest().body("You cannot unblock yourself or you're not authenticated.");
+        }
+
+        try {
+            // Delete both possible relationships (user1 to user2 and user2 to user1)
+            friendRepository.deleteByUser1IdAndUser2Id(currentUserId, userIdToUnblock);
+            friendRepository.deleteByUser1IdAndUser2Id(userIdToUnblock, currentUserId);
+        } catch (Exception e) {
+            // Handle any errors that occur during the deletion (e.g., no relationship found)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to unblock user. Please try again later.");
+        }
+
+        // Return a success message
+        return ResponseEntity.ok("User unblocked successfully!");
     }
 }
