@@ -59,14 +59,24 @@
                         <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
 
-                            <button  class="Comment">Comment &nbsp</button>
-                            <button class="Like" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
+                            <button  class="Commentbutton">Comment &nbsp</button>
+                            <button class="Likebutton" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
 
 
 
                             <form th:action="@{posts/delete/{id}(id=${post.id})}" method="post" style="display: inline;">
-                                <button type="submit" class="Delete">Delete &nbsp</button>
+                                <button type="submit" class="Deletebutton">Delete &nbsp</button>
                             </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="CommentFeed">
+                    <div class="Comment" th:id="${post.id}*-1">
+                        <div class="Username">
+                            User123456
+                        </div>
+                        <div class="CommentText">
+                            womp womp v2 electric boogaloo
                         </div>
                     </div>
                 </div>

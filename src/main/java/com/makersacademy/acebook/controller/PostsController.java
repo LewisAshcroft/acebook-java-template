@@ -153,8 +153,4 @@ public class PostsController {
         return "redirect:/posts";
     }
 
-    @GetMapping("/test")
-    public String testcomment(){
-        return "posts/test";
-    }
 }
