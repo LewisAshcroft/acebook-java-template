@@ -9,6 +9,11 @@
     <form action="#" th:action="@{/new-post}" th:object="${post}" enctype="multipart/form-data" method="post">
         <p>Content: <input type="text" name="content" th:field="*{content}" /></p>
         <p>File: <input id="input-file" type="file" name="file" /></p>
+        <p>
+            Private:
+            <input type="checkbox" name="isPrivate" value="true" />
+            <span>Make this Post Private?</span>
+        </p>
         <p><input type="submit" value="Submit" /></p>
     </form>
 </body>
