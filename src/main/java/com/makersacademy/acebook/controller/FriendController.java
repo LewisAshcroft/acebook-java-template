@@ -146,15 +146,25 @@ public class FriendController {
         }
 
         try {
-            // Delete both possible relationships (user1 to user2 and user2 to user1)
-            friendRepository.deleteByUser1IdAndUser2Id(currentUserId, userIdToUnblock);
-            friendRepository.deleteByUser1IdAndUser2Id(userIdToUnblock, currentUserId);
+            // Check if a 'blocked' relationship exists between the users
+            Optional<Friend> existingFriend1 = friendRepository.findByUser1IdAndUser2Id(currentUserId, userIdToUnblock);
+            Optional<Friend> existingFriend2 = friendRepository.findByUser1IdAndUser2Id(userIdToUnblock, currentUserId);
+
+            // If a friendship exists and is blocked, proceed with unblock
+            if (existingFriend1.isPresent() && "blocked".equals(existingFriend1.get().getStatus())) {
+                friendRepository.delete(existingFriend1.get());
+            } else if (existingFriend2.isPresent() && "blocked".equals(existingFriend2.get().getStatus())) {
+                friendRepository.delete(existingFriend2.get());
+            } else {
+                // If no blocked relationship exists, return a 400 response
+                return ResponseEntity.badRequest().body("No blocked relationship exists between the users.");
+            }
+
+            // Return success message
+            return ResponseEntity.ok("User unblocked successfully!");
         } catch (Exception e) {
-            // Handle any errors that occur during the deletion (e.g., no relationship found)
+            e.printStackTrace(); // Log the exception to help identify the problem
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to unblock user. Please try again later.");
         }
-
-        // Return a success message
-        return ResponseEntity.ok("User unblocked successfully!");
     }
 }
