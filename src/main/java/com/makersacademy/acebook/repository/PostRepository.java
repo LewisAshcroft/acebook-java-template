@@ -1,6 +1,7 @@
 package com.makersacademy.acebook.repository;
 
 import com.makersacademy.acebook.model.Post;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,8 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
 
     List<Post> findAll();
+
+    Iterable<Post> findAll(Sort sort);
 
     List<Post> findAllByUserId(Long id);
 
@@ -27,6 +30,7 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p WHERE p.isPublic = true OR p.userId = :userId OR EXISTS (" +
             "SELECT 1 FROM Friend f WHERE f.id.user1Id = :userId AND f.id.user2Id = p.userId AND f.status = 'accepted' " +
-            "OR f.id.user1Id = p.userId AND f.id.user2Id = :userId AND f.status = 'accepted')")
+            "OR f.id.user1Id = p.userId AND f.id.user2Id = :userId AND f.status = 'accepted')" +
+            "ORDER BY p.createdAt DESC")
     List<Post> findVisiblePosts(@Param("userId") Long userId);
 }
