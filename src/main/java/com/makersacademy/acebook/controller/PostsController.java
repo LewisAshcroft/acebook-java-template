@@ -54,8 +54,8 @@ public class PostsController {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         model.addAttribute("user", currentUser);
 
-        // Fetch all posts
-        Iterable<Post> posts = postRepository.findAll();
+        // Fetch posts that are either public or belong to the current user's friends
+        List<Post> posts = postRepository.findVisiblePosts(userId);
 
         // Create a list of posts with additional data
         List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
