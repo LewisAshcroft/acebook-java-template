@@ -166,8 +166,25 @@ public class PostsController {
 
     @PostMapping("/posts/delete/{id}")
     public String deletePost(@PathVariable("id") long postId) {
-        System.out.println("Attempting to delete post with ID:" +postId);
-        postRepository.deleteById(postId);
+        System.out.println("Attempting to delete post with ID: " + postId);
+
+        Long userId = authService.getCurrentUserId();  // Get the currently logged-in user's ID
+
+        if (userId == null) {
+            return "redirect:/posts"; // Do nothing and redirect back to posts
+        }
+
+        // Fetch the post to verify ownership
+        Optional<Post> optionalPost = postRepository.findById(postId);
+
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            if (post.getUserId().equals(userId)) {
+                postRepository.deleteById(postId); // Delete only if the user owns the post
+            }
+        }
+
         return "redirect:/posts";
     }
+
 }
