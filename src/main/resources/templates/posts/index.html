@@ -59,7 +59,7 @@
                         <div class="TimeStamp"><span th:text="${post.createdAt}"></span></div>
                         <div class="BottomBar">
 
-                            <button  class="Commentbutton">Comment &nbsp</button>
+                            <button  class="Commentbutton" th:data-post-id="${post.id}" onclick="showComments(this)" >Comment &nbsp</button>
                             <button class="Likebutton" th:data-post-id="${post.id}" onclick="likePost(this)">♡</button>
 
 
@@ -70,13 +70,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="CommentFeed">
-                    <div class="Comment" th:id="${post.id}*-1">
-                        <div class="Username">
-                            User123456
-                        </div>
-                        <div class="CommentText">
-                            womp womp v2 electric boogaloo
+                <div class="CommentFeed" th:id="${post.id}*-1">
+                    <div th:each="comment : ${comments}">
+                        <div th:if = "${post.id.equals(comment.post_id)}">
+                            <div class="Comment">
+                                <div class="Username">
+                                    <span th:each="user : ${users}"
+                                          th:if="${user.id == comment.user_id}"
+                                          th:text="${user.username}">
+                                    </span>
+                                </div>
+                                <div class="CommentText">
+                                    <span th:text="${comment.content}"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

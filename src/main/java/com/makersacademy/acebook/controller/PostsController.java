@@ -1,8 +1,10 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.model.Comments;
 import com.makersacademy.acebook.model.Like;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.CommentRepository;
 import com.makersacademy.acebook.repository.LikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
@@ -35,6 +37,8 @@ public class PostsController {
     @Autowired
     LikeRepository likeRepository;
     @Autowired
+    CommentRepository commentRepository;
+    @Autowired
     AuthService authService;
 
     @GetMapping("/posts")
@@ -54,9 +58,11 @@ public class PostsController {
         // Add posts and users to the model
         List<Post> posts = postRepository.findAll();
         List<User> users = userRepository.findAll();
+        List<Comments> comments = commentRepository.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("users", users);
         model.addAttribute("post", new Post());
+        model.addAttribute("comments", comments);
 
         return "posts/index";
     }

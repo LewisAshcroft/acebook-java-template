@@ -43,10 +43,10 @@
     border: 2px solid black;
     width: 80%;
     height: auto;
-    display: inline-flex;
     justify-content: center;
     margin-left: 88px;
     margin-top: 2px;
+    display: none;
 }
 
 .Comment{
@@ -81,7 +81,7 @@
 }
 
 .show {
-display:block;
+display:inline-block;
 }
 
 .hide {

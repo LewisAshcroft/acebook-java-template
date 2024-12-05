@@ -2,6 +2,13 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+function showComments(CommentButton) {
+    const post_id = CommentButton.getAttribute('data-post-id');
+    var comment_id = (post_id * -1)
+    document.getElementById(comment_id).classList.toggle("show");
+
+}
+
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -36,7 +43,7 @@ function searchFunction() {
 
 async function likePost(likeButton) {
     // Locate the post ID from the button's data attribute
-    const postId = likeButton.getAttribute('data-post-id');
+    const postId =  likeButton.getAttribute('data-post-id');
 
     if (!postId) {
         console.error('Post ID not found');
