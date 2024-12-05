@@ -67,7 +67,8 @@
                                 <span th:text="' (' + (${postData.likeCount} ?: 0) + ')'"></span>
                             </button>
                             <form th:action="@{posts/delete/{id}(id=${postData.post.id})}" method="post" style="display: inline;">
-                                <button type="submit" class="Delete">Delete &nbsp</button>
+                                <button type="submit" class="Delete"
+                                        th:if="${user.id == postData.post.userId}">Delete &nbsp;</button>
                             </form>
                         </div>
                     </div>

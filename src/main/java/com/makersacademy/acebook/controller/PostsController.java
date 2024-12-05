@@ -7,6 +7,7 @@ import com.makersacademy.acebook.repository.LikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.AuthService;
+import com.makersacademy.acebook.service.BlockedService;
 import com.makersacademy.acebook.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +36,8 @@ public class PostsController {
     LikeRepository likeRepository;
     @Autowired
     AuthService authService;
+    @Autowired
+    BlockedService blockedService;
 
     @GetMapping("/posts")
     public String index(Model model) {
@@ -57,6 +60,11 @@ public class PostsController {
         // Create a list of posts with additional data
         List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
         for (Post post : posts) {
+            // Skip posts from blocked users
+            if (blockedService.isBlocked(userId, post.getUserId()) || blockedService.isBlocked(post.getUserId(), userId)) {
+                continue;
+            }
+
             Map<String, Object> postData = new HashMap<>();
             postData.put("post", post);
 
