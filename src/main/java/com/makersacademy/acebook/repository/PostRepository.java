@@ -24,4 +24,9 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p WHERE p.userId = :userId AND p.isPublic = TRUE")
     List<Post> findPublicPostsByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT p FROM Post p WHERE p.isPublic = true OR p.userId = :userId OR EXISTS (" +
+            "SELECT 1 FROM Friend f WHERE f.id.user1Id = :userId AND f.id.user2Id = p.userId AND f.status = 'accepted' " +
+            "OR f.id.user1Id = p.userId AND f.id.user2Id = :userId AND f.status = 'accepted')")
+    List<Post> findVisiblePosts(@Param("userId") Long userId);
 }
