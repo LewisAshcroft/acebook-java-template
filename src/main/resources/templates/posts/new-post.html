@@ -3,18 +3,20 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>New Post</title>
+    <link rel="stylesheet" href="post-page.css">
+    <script src="new-post.js"></script>
 </head>
 <body>
-    <form action="#" th:action="@{/new-post}" th:object="${post}" enctype="multipart/form-data" method="post">
-        <p>Content: <input type="text" name="content" th:field="*{content}" /></p>
-        <p>File: <input id="input-file" type="file" name="file" /></p>
-        <p>
-            Private:
-            <input type="checkbox" name="isPrivate" value="true" />
-            <span>Make this Post Private?</span>
-        </p>
-        <p><input type="submit" value="Submit" /></p>
+    <form class="new-post-form" action="#" th:action="@{/new-post}" th:object="${post}" enctype="multipart/form-data" method="post">
+        <h2>Make a Post</h2>
+        <label for="input-file" id="label-file">Upload an Image or Video</label>
+        <input id="input-file" type="file" name="file" hidden/>
+        <div id="preview"></div>
+        
+        <div><p>Content <textarea id="content-area" type="text" name="content" th:field="*{content}"></textarea></p></div>
+        <div><input type="checkbox" name="isPrivate" id="privacy" value="true" /><label for="privacy"> Make this Post Private</label></div>
+        <input id="submit-btn" type="submit" value="Submit" />
     </form>
 </body>
 </html>
