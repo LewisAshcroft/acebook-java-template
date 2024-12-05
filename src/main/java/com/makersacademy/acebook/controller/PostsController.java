@@ -60,6 +60,10 @@ public class PostsController {
         // Create a list of posts with additional data
         List<Map<String, Object>> postsWithLikeStatus = new ArrayList<>();
         for (Post post : posts) {
+            // Ensure that the createdAt field is not null and set a default if it is
+            if (post.getCreatedAt() == null) {
+                post.setCreatedAt(Timestamp.valueOf(LocalDateTime.now())); // Set a default timestamp if null
+            }
             // Skip posts from blocked users
             if (blockedService.isBlocked(userId, post.getUserId()) || blockedService.isBlocked(post.getUserId(), userId)) {
                 continue;

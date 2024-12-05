@@ -55,7 +55,7 @@
                         <span th:text="${postData.post.content}"></span>
                     </div>
                     <div class="BottomBar">
-                        <div class="TimeStamp"><span th:text="${postData.post.createdAt}"></span></div>
+                        <div class="TimeStamp"><span th:text="${#dates.format(postData.post.createdAt, 'HH:mm d MMM yyyy')}"></span></div>
 
                         <div class="BottomBar">
                             <button class="Comment">Comment &nbsp</button>
