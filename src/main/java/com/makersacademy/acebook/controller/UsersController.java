@@ -2,8 +2,11 @@ package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.AuthService;
+import com.makersacademy.acebook.service.BlockedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +26,12 @@ public class UsersController {
     UserRepository userRepository;
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    FriendRepository friendRepository;
+    @Autowired
+    AuthService authService;
+    @Autowired
+    BlockedService blockedService;
 
     @GetMapping("/users/after-login")
     public RedirectView afterLogin() {
@@ -40,21 +49,55 @@ public class UsersController {
     }
 
     @GetMapping("/profile/{id}")
-    public ModelAndView userProfile(@PathVariable Long id, Model model) {
+    public ModelAndView userProfile(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/user/profile");
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
-        if (currentUser.isPresent()) {
-            User activeUser = currentUser.get();
-            modelAndView.addObject("activeUser", activeUser);
+        // Get the authenticated user's ID
+        Long currentUserId = authService.getCurrentUserId();
+        if (currentUserId == null) {
+            modelAndView.setViewName("error/403"); // Redirect to "Access Denied" if unauthenticated
+            return modelAndView;
         }
 
-        User user = userRepository.findById(id).get();
-        modelAndView.addObject("user", user);
+        // Get the authenticated user
+        User activeUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new RuntimeException("Current user not found"));
+        modelAndView.addObject("activeUser", activeUser);
 
-        Iterable<Post> posts = postRepository.findAllByUserId(id);
+        // Get the user being viewed
+        User profileUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        modelAndView.addObject("user", profileUser);
+
+        // Check if blocked
+        if (blockedService.isBlocked(currentUserId, id)) {
+            if (blockedService.isBlockInitiator(currentUserId, id)) {
+                // If the current user initiated the block
+                modelAndView.addObject("isBlocked", true);
+                modelAndView.setViewName("/user/blocked-profile");
+            } else {
+                // If blocked by the other user, deny access
+                modelAndView.setViewName("error/403");
+            }
+            return modelAndView;
+        }
+
+        // Check friendship status and load posts accordingly
+        Optional<String> statusOpt = friendRepository.findRelationshipStatus(currentUserId, id);
+        if (statusOpt.isPresent()) {
+            String status = statusOpt.get();
+            if (status.equals("accepted")) {
+                // If friends, show both public and private posts
+                Iterable<Post> posts = postRepository.findByUserIdAndIsPublicOrUserId(id, currentUserId);
+                modelAndView.addObject("posts", posts);
+                return modelAndView;
+            }
+        }
+
+        // If no relationship exists or status is "pending," show only public posts
+        Iterable<Post> posts = postRepository.findByUserIdAndIsPublic(id);
         modelAndView.addObject("posts", posts);
+
         return modelAndView;
     }
 
