@@ -40,20 +40,18 @@ window.onclick = function (event) {
 
 function searchFunction() {
     const elements = document.getElementsByClassName("Post");
-    let search = document.getElementById("searchbar").value;
-    console.log("This is what you searched: " + search);
-
+    let search = document.getElementById("searchbar").value.toLowerCase();
 
     for (let i = 0; i < elements.length; i++) {
-        var element = elements[i];
-       if (search == "" || search == i+1){
+        const element = elements[i];
+        const textContent = element.textContent.toLowerCase();
+
+        if (search === "" || textContent.includes(search)) {
             element.classList.remove("hide");
-       } else {
+        } else {
             element.classList.add("hide");
-       }
-
+        }
     }
-
 }
 
 
