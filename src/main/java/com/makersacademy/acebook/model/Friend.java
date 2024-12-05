@@ -14,6 +14,14 @@ public class Friend {
     @Column(nullable = false)
     private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "user_1_id", insertable = false, updatable = false)
+    private User user1;
+
+    @ManyToOne
+    @JoinColumn(name = "user_2_id", insertable = false, updatable = false)
+    private User user2;
+
     // Constructors
     public Friend() {
     }
