@@ -2,8 +2,10 @@ package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.FriendRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +25,10 @@ public class UsersController {
     UserRepository userRepository;
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    FriendRepository friendRepository;
+    @Autowired
+    AuthService authService;
 
     @GetMapping("/users/after-login")
     public RedirectView afterLogin() {
