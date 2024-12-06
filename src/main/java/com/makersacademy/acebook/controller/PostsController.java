@@ -1,8 +1,10 @@
 package com.makersacademy.acebook.controller;
 
+import com.makersacademy.acebook.model.Comments;
 import com.makersacademy.acebook.model.Like;
 import com.makersacademy.acebook.model.Post;
 import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.CommentRepository;
 import com.makersacademy.acebook.repository.LikeRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
@@ -34,6 +36,8 @@ public class PostsController {
     FilesStorageService storageService;
     @Autowired
     LikeRepository likeRepository;
+    @Autowired
+    CommentRepository commentRepository;
     @Autowired
     AuthService authService;
     @Autowired
@@ -85,6 +89,12 @@ public class PostsController {
 
         // Add the structured posts data to the model
         model.addAttribute("posts", postsWithLikeStatus);
+
+        List<Comments> comments = commentRepository.findAll();
+        model.addAttribute("comments", comments);
+
+        List<User> users = userRepository.findAll();
+        model.addAttribute("users", users);
 
         return "posts/index";
     }

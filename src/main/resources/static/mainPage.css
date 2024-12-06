@@ -1,4 +1,3 @@
-
 .Banner {
     border: 2px solid black;
     padding: 20px;
@@ -15,14 +14,12 @@
 }
 
 .Content{
-    //border: 2px solid black;
     margin: 225px auto 0;
     display: grid;
     justify-content: center;
 }
 
 .SearchHolder {
-    //border: 2px solid black;
     display: inline-flex;
     justify-content: space-between;
     width: 1000px;
@@ -37,6 +34,26 @@
     height: auto;
     display: block;
     justify-content: center;
+}
+
+.CommentFeed{
+    border: 2px solid black;
+    width: 80%;
+    height: auto;
+    justify-content: center;
+    margin-left: 88px;
+    margin-top: 2px;
+    display: none;
+}
+
+.Comment{
+    border: 2px solid black;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 100px;
+    float: left;
 }
 
 .searchbar {
@@ -60,11 +77,11 @@
 }
 
 .show {
-display:block;
+    display:inline-block;
 }
 
 .hide {
-display:none;
+    display:none;
 }
 
 .dropdown {
@@ -103,14 +120,20 @@ display:none;
     min-height: 100px;
 }
 
+.CommentText {
+    margin-left: 2px;
+    width: 50%;
+
+}
+
 .Centre{
     justify-content: center;
 }
 
 .Username{
-    border: 2px solid black;
     width: 100px;
     margin-bottom: 10px;
+    margin-left: 2px;
 }
 
 #post-image {
