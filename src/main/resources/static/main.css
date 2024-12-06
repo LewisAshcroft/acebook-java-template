@@ -330,3 +330,7 @@ body {
         transform: scale(1.05);
     }
 }
+
+.profile_p {
+    margin-left: 10px;
+}

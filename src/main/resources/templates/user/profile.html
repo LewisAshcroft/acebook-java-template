@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"><head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8"/>
     <title>Acebook</title>
+    <link rel="stylesheet" th:href="@{/main.css}">
+    <div class="Banner">
+        <a href="/posts"><button class="BigButton">Acebook</button></a>
+        <div class="ButtonHolder">
+            <a th:href="@{/new-post}">
+                <button type="button" class="MediumButton">Post</button>
+            </a>
+            <a th:href="@{/profile/{id}(id=${user.id})}">
+                <button class="MediumButton">Profile</button>
+            </a>
+        </div>
+    </div>
 </head>
 <body>
-    <p id="username" th:text="${user.username}"></p>
-    <p id="bio" th:text="${user.bio}"></p>
+    <p class="profile_p" id="username" th:text="${user.username}"></p>
+    <p class="profile_p" id="bio" th:text="${user.bio}"></p>
     <ul th:each="post: ${posts}">
         <li th:text="${post.content}" />
     </ul>
@@ -13,11 +26,11 @@
     <div th:switch="${activeUser.id}">
         <div th:case="${user.id}">
             <form action="#" th:action="@{/profile/{id}(id=${user.id})}" th:object="${user}" method="post">
-                <p>Username: <input type="text" th:field="*{username}" /></p>
-                <p>Bio: <input type="text" th:field="*{bio}" /></p>
-                <p>Email: <input type="text" th:field="${user.email}" /></p>
+                <p class="profile_p" >Username: <input type="text" th:field="*{username}" /></p>
+                <p class="profile_p" >Bio: <input type="text" th:field="*{bio}" /></p>
+                <p class="profile_p" >Email: <input type="text" th:field="${user.email}" /></p>
                 <input type="text" th:field="${user.auth0Id}" hidden/>
-                <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+                <p class="profile_p" ><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
             </form>
         </div>
     </div>
