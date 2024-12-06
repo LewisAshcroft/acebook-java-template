@@ -1,6 +1,8 @@
 package com.makersacademy.acebook.controller;
 
 import com.makersacademy.acebook.model.Friend;
+import com.makersacademy.acebook.model.User;
+import com.makersacademy.acebook.repository.UserRepository;
 import com.makersacademy.acebook.service.AuthService;
 import com.makersacademy.acebook.service.FriendService;
 import com.makersacademy.acebook.repository.FriendRepository;
@@ -23,7 +25,8 @@ public class FriendController {
 
     @Autowired
     private final FriendService friendService;
-
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     private final AuthService authService;
     @Autowired
@@ -86,6 +89,12 @@ public class FriendController {
         if (userId == null) {
             return "redirect:/login"; // Redirect to login if the user is not logged in
         }
+
+        // Fetch the authenticated user
+        User currentUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        model.addAttribute("user", currentUser);
+
         List<Map<String, String>> friends = friendService.getFriendsByUserId(userId); // Get friends' names
         model.addAttribute("friends", friends); // Add the list of friends to the model
         return "friend-list"; // Return the view name (test-friends-list.html)
