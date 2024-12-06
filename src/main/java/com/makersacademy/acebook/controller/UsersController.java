@@ -107,4 +107,35 @@ public class UsersController {
         userRepository.save(user);
         return new RedirectView("/posts");
     }
+
+    // Show edit profile page
+    @GetMapping("/profile/{id}/edit-profile")
+    public ModelAndView editProfile(@PathVariable Long id, Model model) {
+        ModelAndView modelAndView = new ModelAndView("user/edit-profile");
+
+        // Get the currently logged-in user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByAuth0Id(auth.getName());
+
+        if (currentUser.isPresent()) {
+            User activeUser = currentUser.get();
+
+            // Check if the logged-in user is trying to edit their own profile
+            if (!activeUser.getId().equals(id)) {
+                modelAndView.setViewName("redirect:/profile/" + activeUser.getId()); // Redirect to own profile if trying to edit others
+                return modelAndView;
+            }
+
+            // Fetch user data for editing
+            Optional<User> userOptional = userRepository.findById(id);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                modelAndView.addObject("user", user);
+            } else {
+                modelAndView.setViewName("redirect:/profile/" + id); // Redirect if user not found
+            }
+        }
+
+        return modelAndView;
+    }
 }

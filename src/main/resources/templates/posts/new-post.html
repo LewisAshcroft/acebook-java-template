@@ -8,17 +8,6 @@
     <script src="new-post.js"></script>
 </head>
 <body>
-    <div class="Banner">
-        <a href="/posts"><button class="BigButton">Acebook</button></a>
-        <div class="ButtonHolder">
-            <a th:href="@{/new-post}">
-                <button type="button" class="MediumButton">Post</button>
-            </a>
-            <a th:href="@{/profile/{id}(id=${currentUserId})}">
-                <button class="MediumButton">Profile</button>
-            </a>
-        </div>
-    </div>
     <form class="new-post-form" action="#" th:action="@{/new-post}" th:object="${post}" enctype="multipart/form-data" method="post">
         <h2>Make a Post</h2>
         <label for="input-file" id="label-file">Upload an Image or Video</label>
