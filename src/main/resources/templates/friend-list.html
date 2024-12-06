@@ -6,6 +6,17 @@
   <title>Your Friends</title>
 </head>
 <body>
+<div class="Banner">
+  <a href="/posts"><button class="BigButton">Acebook</button></a>
+  <div class="ButtonHolder">
+    <a th:href="@{/new-post}">
+      <button type="button" class="MediumButton">Post</button>
+    </a>
+    <a th:href="@{/profile/{id}(id=${user.id})}">
+      <button class="MediumButton">Profile</button>
+    </a>
+  </div>
+</div>
 <h1>Your Friends</h1>
 <ul>
   <th:block th:each="friend : ${friends}">

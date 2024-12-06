@@ -1,25 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"><head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
     <meta charset="UTF-8"/>
-    <title>Acebook</title>
+    <title>Acebook - Profile</title>
+    <link rel="stylesheet" href="/profile.css">
+    <script src="Main.js"></script>
 </head>
 <body>
-    <p id="username" th:text="${user.username}"></p>
-    <p id="bio" th:text="${user.bio}"></p>
-    <ul th:each="post: ${posts}">
-        <li th:text="${post.content}" />
-    </ul>
 
-    <div th:switch="${activeUser.id}">
-        <div th:case="${user.id}">
-            <form action="#" th:action="@{/profile/{id}(id=${user.id})}" th:object="${user}" method="post">
-                <p>Username: <input type="text" th:field="*{username}" /></p>
-                <p>Bio: <input type="text" th:field="*{bio}" /></p>
-                <p>Email: <input type="text" th:field="${user.email}" /></p>
-                <input type="text" th:field="${user.auth0Id}" hidden/>
-                <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-            </form>
+<!-- Header / Navigation -->
+<div class="Banner">
+    <a href="/posts"><button class="BigButton">Acebook</button></a>
+    <div class="ButtonHolder">
+        <a th:href="@{/new-post}">
+            <button type="button" class="MediumButton">Post</button>
+        </a>
+        <a th:href="@{/profile/{id}(id=${user.id})}">
+            <button class="MediumButton">Profile</button>
+        </a>
+    </div>
+</div>
+
+<!-- Profile Section -->
+<section class="profile-section">
+    <div class="profile-header">
+        <!-- Profile Picture and Info -->
+        <div class="profile-info">
+            <img class="profile-img" src="/images/profile-placeholder.jpg" alt="Profile Picture">
+            <div class="profile-details">
+                <h1 th:text="${user.username}" class="username"></h1>
+                <p th:text="${user.bio}" class="bio"></p>
+                <p th:text="${user.email}" class="email"></p>
+            </div>
         </div>
     </div>
+
+    <!-- Friends List Section -->
+    <section class="friends-section">
+        <h2 class="section-title">Friends List:</h2>
+        <div class="friends-list">
+            <!-- Display first 4 friends -->
+            <ul>
+                <li>John</li>
+                <li>Jane</li>
+                <li>Mike</li>
+                <li>Susan</li>
+            </ul>
+        </div>
+        <!-- See More Button -->
+        <div class="see-more-btn">
+            <a th:href="@{/friends/friend-list}">
+                <button class="MediumButton">See More...</button>
+            </a>
+        </div>
+    </section>
+
+    <!-- User Posts Section -->
+    <section class="posts-section">
+        <h2 class="section-title">User Posts:</h2>
+        <div class="posts-list">
+            <ul th:each="post : ${posts}">
+                <li class="post-item">
+                    <p th:text="${post.content}" class="post-content"></p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Edit Profile Button -->
+    <div class="edit-profile-btn">
+        <a th:href="@{/profile/{id}/edit-profile(id=${user.id})}">
+            <button type="button" class="MediumButton">Edit Profile</button>
+        </a>
+    </div>
+</section>
+
 </body>
 </html>

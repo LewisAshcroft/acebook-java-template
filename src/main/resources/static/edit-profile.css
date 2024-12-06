@@ -1,0 +1,159 @@
+/* General Body and Layout */
+body.edit-profile {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.Banner {
+    border: none;
+    padding: 20px 40px;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.Banner .Logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1877f2; /* Facebook blue */
+    display: flex;
+    align-items: center;
+}
+
+.ButtonHolder {
+    display: flex;
+    justify-content: space-evenly;
+    width: 400px;
+}
+
+.ButtonHolder .Button {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #1877f2;
+    color: white;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ButtonHolder .Button:hover {
+    background-color: #155f91; /* Dark blue */
+}
+
+
+/* Edit Profile Section */
+.Center {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+.BigButton {
+    height: 50px;
+    width: 200px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: #1877f2; /* Facebook blue */
+    color: white;
+    font-size: 16px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.BigButton:hover {
+    background-color: #155f91; /* Dark blue on hover */
+    transform: scale(1.05);
+}
+
+.MediumButton {
+    height: 40px;
+    width: 150px;
+    margin: auto;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: #1877f2;
+    color: white;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.MediumButton:hover {
+    background-color: #155f91;
+    transform: scale(1.05);
+}
+
+.Feed {
+    width: 100%;
+}
+
+.ProfileForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.FormField {
+    display: flex;
+    flex-direction: column;
+}
+
+.FormField label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.FormField input[type="text"] {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.FormField input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.FormActions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .Center {
+        padding: 15px;
+    }
+
+    .FormActions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
