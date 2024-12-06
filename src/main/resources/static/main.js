@@ -6,7 +6,6 @@ function showComments(CommentButton) {
     const post_id = CommentButton.getAttribute('data-post-id');
     var comment_id = (post_id * -1)
     document.getElementById(comment_id).classList.toggle("show");
-
 }
 
 document.addEventListener("DOMContentLoaded", () => {

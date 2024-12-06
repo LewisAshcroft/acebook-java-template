@@ -62,7 +62,7 @@ body {
 .SearchHolder {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 80%;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
@@ -102,7 +102,7 @@ body {
 }
 
 .show {
-    display: block;
+    display: inline-block;
 }
 
 .hide {
@@ -147,6 +147,31 @@ body {
 
 .Post:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.CommentFeed{
+    border: 2px solid black;
+    width: 80%;
+    height: auto;
+    justify-content: center;
+    margin-left: 88px;
+    margin-top: 2px;
+    display: none;
+}
+
+.Comment{
+    border: 2px solid black;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 100px;
+    float: left;
+}
+
+.CommentText {
+    margin-left: 2px;
+    width: 50%;
 }
 
 .TimeStamp {
@@ -304,4 +329,8 @@ body {
         background-color: #155f91; /* Darker blue */
         transform: scale(1.05);
     }
+}
+
+.profile_p {
+    margin-left: 10px;
 }
