@@ -237,6 +237,9 @@ header nav .btn-group a button:hover {
 .edit-profile-btn {
     text-align: center;
     margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .edit-profile-btn .btn {
