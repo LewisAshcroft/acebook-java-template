@@ -3,9 +3,19 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Acebook</title>
-        <link rel="stylesheet" href="mainPage.css">
-        <script rel="mainPage.js" src="mainPage.js"></script>
-        <div class="Banner"> <h1>Acebook</h1> <div class="ButtonHolder"> <h1>Post</h1> <h1>Profile</h1> </div> </div>
+        <link rel="stylesheet" href="main.css">
+        <script rel="mainPage.js" src="main.js"></script>
+        <div class="Banner">
+            <a href="/posts"><button class="BigButton">Acebook</button></a>
+            <div class="ButtonHolder">
+                <a th:href="@{/new-post}">
+                    <button type="button" class="MediumButton">Post</button>
+                </a>
+                <a th:href="@{/profile/{id}(id=${user.id})}">
+                    <button class="MediumButton">Profile</button>
+                </a>
+            </div>
+        </div>
     </head>
     <body>
 

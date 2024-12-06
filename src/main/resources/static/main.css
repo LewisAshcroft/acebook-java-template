@@ -1,10 +1,332 @@
-.posts-main {
-    border-collapse: collapse;
+/* Basic Body & Layout Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5; /* Light grey background similar to Facebook */
+    color: #333;
 }
 
-.post-main {
-    border: 1px solid #999;
-    padding: 0.5rem;
-    text-align: left;
-    margin-bottom: 0.5rem;;
+.Banner {
+    border: none;
+    padding: 20px 40px;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.Banner .Logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1877f2; /* Facebook blue */
+    display: flex;
+    align-items: center;
+}
+
+.ButtonHolder {
+    display: flex;
+    justify-content: space-evenly;
+    width: 400px;
+}
+
+.ButtonHolder .Button {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #1877f2;
+    color: white;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ButtonHolder .Button:hover {
+    background-color: #155f91; /* Dark blue */
+}
+
+/* Centering content in the middle */
+.Center {
+    margin: 225px auto 0;
+    display: grid;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Search and Dropdown styling */
+.SearchHolder {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+.searchbar {
+    height: 40px;
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.searchbar:focus {
+    border-color: #1877f2;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.show {
+    display: inline-block;
+}
+
+.hide {
+    display: none;
+}
+
+.dropdown .dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    font-size: 14px;
+}
+
+.dropdown .dropdown-content a:hover {
+    background-color: #f1f1f1; /* Light grey */
+}
+
+/* Feed and Post Styling */
+.Feed {
+    border: none;
+    padding: 20px;
+    width: 80%;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Post {
+    border: none;
+    background-color: white;
+    width: 80%;
+    justify-self: center;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.Post:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.CommentFeed{
+    border: 2px solid black;
+    width: 80%;
+    height: auto;
+    justify-content: center;
+    margin-left: 88px;
+    margin-top: 2px;
+    display: none;
+}
+
+.Comment{
+    border: 2px solid black;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 100px;
+    float: left;
+}
+
+.CommentText {
+    margin-left: 2px;
+    width: 50%;
+}
+
+.TimeStamp {
+    width: 180px;
+    display: flex;
+    justify-content: space-between;
+    color: #8a8a8a; /* Medium grey */
+    font-size: 12px;
+}
+
+.Like {
+    color: #1877f2;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.BottomBar {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.TextBox {
+    width: 95%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    font-size: 14px;
+    background-color: #f7f7f7;
+}
+
+.Username {
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f7f7f7;
+}
+
+#post-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Button Styling */
+.BigButton {
+    height: 50px;
+    width: 200px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: #1877f2; /* Facebook blue */
+    color: white;
+    font-size: 16px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.BigButton:hover {
+    background-color: #155f91; /* Dark blue on hover */
+    transform: scale(1.05);
+}
+
+.MediumButton {
+    height: 40px;
+    width: 150px;
+    margin: auto;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: #1877f2;
+    color: white;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.MediumButton:hover {
+    background-color: #155f91;
+    transform: scale(1.05);
+}
+
+.Centre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.profile .BigButton {
+    height: 50px;
+    width: 200px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: #1877f2; /* Facebook blue */
+    color: white;
+    font-size: 16px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.profile .BigButton:hover {
+    background-color: #155f91; /* Dark blue */
+    transform: scale(1.05);
+}
+
+.profile .EditProfileButtonWrapper {
+    text-align: center;
+    margin-top: 30px;
+
+    .profile .BigButton {
+        height: 50px;
+        width: 200px;
+        border-radius: 25px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        background-color: #1877f2; /* Facebook blue */
+        color: white;
+        font-size: 16px;
+        border: none;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .profile .BigButton:hover {
+        background-color: #155f91; /* Dark blue */
+        transform: scale(1.05);
+    }
+
+    /* Generic Button Style (for Post and Profile buttons) */
+
+    .ButtonHolder .MediumButton,
+    .new-post-form button[type="button"] {
+        padding: 16px 30px; /* Larger padding for bigger buttons */
+        font-size: 18px; /* Bigger font size */
+        background-color: #1877f2; /* Facebook blue */
+        color: white;
+        border-radius: 50px; /* Rounded corners */
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    /* Hover Effect for Generic Buttons */
+
+    .ButtonHolder .MediumButton:hover,
+    .new-post-form button[type="button"]:hover {
+        background-color: #155f91; /* Darker blue */
+        transform: scale(1.05);
+    }
 }
