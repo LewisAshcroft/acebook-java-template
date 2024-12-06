@@ -84,6 +84,16 @@ public class PostsController {
             long likeCount = likeRepository.countByPostId(post.getId());
             postData.put("likeCount", likeCount);
 
+            // Fetch and add the first and last name of the post owner
+            Optional<User> postOwner = userRepository.findById(post.getUserId());
+            if (postOwner.isPresent()) {
+                postData.put("userFirstName", postOwner.get().getFirstName());
+                postData.put("userLastName", postOwner.get().getLastName());
+            } else {
+                postData.put("userFirstName", "Unknown");
+                postData.put("userLastName", "User");
+            }
+
             postsWithLikeStatus.add(postData);
         }
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Acebook - Edit Profile</title>
+  <link rel="stylesheet" href="/edit-profile.css">
+  <script src="/main.js"></script>
+</head>
+
+
+
+<body class="edit-profile">
+
+<div class="Banner">
+  <a href="/posts"><button class="BigButton">Acebook</button></a> <!-- Link to posts page -->
+  <div class="ButtonHolder">
+    <a th:href="@{/new-post}">
+      <button type="button" class="MediumButton">Post</button>
+    </a>
+    <a th:href="@{/profile/{id}(id=${user.id})}">
+      <button class="MediumButton">Profile</button>
+    </a>
+  </div>
+</div>
+
+
+<!-- Edit Profile Content -->
+<div class="Center">
+  <div class="Feed">
+    <h2>Edit Profile</h2>
+
+    <!-- Edit Profile Form -->
+    <form th:action="@{/profile/{id}(id=${user.id})}" th:object="${user}" method="post" class="ProfileForm">
+      <div class="FormField">
+        <label for="username">Username:</label>
+        <input type="text" th:field="*{username}" id="username" />
+      </div>
+      <div class="FormField">
+        <label for="bio">Bio:</label>
+        <input type="text" th:field="*{bio}" id="bio" />
+      </div>
+      <div class="FormField">
+        <label for="email">Email:</label>
+        <input type="text" th:field="*{email}" id="email" />
+      </div>
+      <input type="text" th:field="*{auth0Id}" hidden />
+      <div class="FormActions">
+        <input type="submit" value="Submit" class="MediumButton" />
+        <input type="reset" value="Reset" class="MediumButton" />
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
