@@ -72,6 +72,12 @@
         <a th:href="@{/profile/{id}/edit-profile(id=${user.id})}">
             <button type="button" class="MediumButton">Edit Profile</button>
         </a>
+        <form th:action="@{/friends/block/{id}(id=${user.id})}" method="post">
+            <button type="submit" class="MediumButton">Block</button>
+        </form>
+        <form th:action="@{/friends/request/{id}(id=${user.id})}" method="post">
+            <button type="submit" class="MediumButton">Add Friend</button>
+        </form>
     </div>
 </section>
 
